@@ -1,0 +1,10 @@
+bin
+build
+build_gradle
+.classpath
+.settings
+.project
+manifest.mf
+MANIFEST.MF
+test-output
+.gradle

@@ -1,0 +1,2 @@
+Simple web socket client using tyrus
+

@@ -1,0 +1,4 @@
+# HTTP proxy
+#systemProp.http.proxyHost=<host>
+#systemProp.http.proxyPort=<port>
+#systemProp.http.nonProxyHosts=<host1|host2>
