@@ -1,0 +1,32 @@
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse-wtp'
+
+buildDir='build_gradle'
+
+eclipse {
+   wtp {
+      facet {
+          facet name: 'java', version: '1.8'
+      }
+   }
+}
+ 
+sourceSets{  
+    main{  
+        java{  
+            srcDirs 'src/main/java'  
+        }
+    }  
+}  
+        
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+   testCompile 'org.testng:testng:6.9.13.6'
+}
+
+
