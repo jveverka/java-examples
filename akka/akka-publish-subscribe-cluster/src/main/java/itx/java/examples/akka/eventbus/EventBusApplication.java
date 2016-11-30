@@ -6,7 +6,7 @@ import akka.actor.Props;
 
 public class EventBusApplication {
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		
 		final ActorSystem system = ActorSystem.create("Events");
 		
@@ -14,6 +14,8 @@ public class EventBusApplication {
 		//another node
 		system.actorOf(Props.create(Subscriber.class), "subscriber2");
 		system.actorOf(Props.create(Subscriber.class), "subscriber3");
+		
+		Thread.sleep(2000);
 		
 		ActorRef publisher = system.actorOf(Props.create(Publisher.class), "publisher");
 		publisher.tell("hello", null);
