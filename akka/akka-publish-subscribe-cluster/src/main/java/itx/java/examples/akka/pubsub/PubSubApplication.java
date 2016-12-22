@@ -1,10 +1,10 @@
-package itx.java.examples.akka.eventbus;
+package itx.java.examples.akka.pubsub;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 
-public class EventBusApplication {
+public class PubSubApplication {
 	
 	public static void main(String[] args) throws InterruptedException {
 		

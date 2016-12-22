@@ -1,4 +1,4 @@
-package itx.java.examples.akka.eventbus;
+package itx.java.examples.akka.pubsub;
 
 import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
