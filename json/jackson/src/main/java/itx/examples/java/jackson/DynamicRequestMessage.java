@@ -1,19 +1,19 @@
 package itx.examples.java.jackson;
 
 /**
- * Created by gergej on 25.12.2016.
+ * Created by gergej on 31.12.2016.
  */
-public class RequestMessage extends Message {
+public class DynamicRequestMessage extends Message {
 
-    public static final String TYPE = "RequestMessage";
+    public static final String TYPE = "DynamicRequestMessage";
 
     private String data;
 
-    public RequestMessage() {
+    public DynamicRequestMessage() {
         super(TYPE);
     }
 
-    public RequestMessage(String data) {
+    public DynamicRequestMessage(String data) {
         super(TYPE);
         this.data = data;
     }

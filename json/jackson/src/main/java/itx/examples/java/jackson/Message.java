@@ -12,11 +12,15 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = RequestMessage.class, name = "request"),
-        @JsonSubTypes.Type(value = ResponseMessage.class, name = "response") })
+        @JsonSubTypes.Type(value = RequestMessage.class, name = "RequestMessage"),
+        @JsonSubTypes.Type(value = ResponseMessage.class, name = "ResponseMessage") })
 public abstract class Message {
 
     private String type;
+
+    public Message(String type) {
+        this.type = type;
+    }
 
     public String getType() {
         return type;

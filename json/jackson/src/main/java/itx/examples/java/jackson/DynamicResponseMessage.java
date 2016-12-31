@@ -1,20 +1,20 @@
 package itx.examples.java.jackson;
 
 /**
- * Created by gergej on 25.12.2016.
+ * Created by gergej on 31.12.2016.
  */
-public class ResponseMessage extends Message {
+public class DynamicResponseMessage extends Message {
 
-    public static final String TYPE = "ResponseMessage";
+    public static final String TYPE = "DynamicResponseMessage";
 
     private String data;
     private Long responseId;
 
-    public ResponseMessage() {
+    public DynamicResponseMessage() {
         super(TYPE);
     }
 
-    public ResponseMessage(String data, Long responseId) {
+    public DynamicResponseMessage(String data, Long responseId) {
         super(TYPE);
         this.data = data;
         this.responseId = responseId;
