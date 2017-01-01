@@ -27,7 +27,7 @@ repositories {
 }
 
 dependencies {
-   compile 'com.jcabi:jcabi-ssh:1.5.2'
+   compile group: 'org.apache.sshd', name: 'sshd-core', version: '1.3.0'
    testCompile 'org.testng:testng:6.10'
 }
 

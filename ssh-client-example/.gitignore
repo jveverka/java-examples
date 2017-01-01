@@ -5,4 +5,4 @@ build
 build_gradle
 .classpath
 .project
-
+.idea
