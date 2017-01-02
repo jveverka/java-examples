@@ -41,7 +41,7 @@ public class SshClientControllerImpl implements SshClientController {
             client = SshClient.setUpDefaultClient();
             client.start();
             session = client.connect(userName, hostName, port).verify().getSession();
-            session.addPasswordIdentity("gergej");
+            session.addPasswordIdentity(password);
             session.auth().await();
         } catch (IOException e) {
             throw new SshControllerException(e);
@@ -97,7 +97,7 @@ public class SshClientControllerImpl implements SshClientController {
     @Override
     public void close() throws Exception {
         session.close();
-        session.close();
+        client.close();
     }
 
 }
