@@ -25,6 +25,15 @@ public final class Utils {
         return sb.toString();
     }
 
+    public static int[][] createReflectorSubstitutionMap(Alphabet alphabet) {
+        int[][] result = new int[alphabet.getSize()][2];
+        for (int i = 0; i < alphabet.getSize(); i++) {
+            result[i][0] = i;
+            result[i][1] = alphabet.getIndex(alphabet.getCharacter(alphabet.getSize() - i - 1));
+        }
+        return result;
+    }
+
     public static int[][] createSubstitutionMap(Alphabet alphabet, String randomizedAlphabet) {
         if (alphabet.getSize() != randomizedAlphabet.length()) {
             throw new UnsupportedOperationException("input and output string must have same lenght");

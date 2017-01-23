@@ -13,20 +13,21 @@ public final class EnigmaSetup {
         throw new UnsupportedOperationException();
     }
 
+    public static final Alphabet defaultAlphabet;
     public static final int[][] reflectorData;
     public static final int[][] rotor0Data;
     public static final int[][] rotor1Data;
     public static final int[][] rotor2Data;
 
     static {
-        rotor0Data = Utils.createSubstitutionMap(Alphabet.buildAlphabet26(),
+        defaultAlphabet = Alphabet.buildAlphabet26();
+        rotor0Data = Utils.createSubstitutionMap(defaultAlphabet,
                 "OKXRZMPWGDYQLVBIFJAUSCTHEN");
-        rotor1Data = Utils.createSubstitutionMap(Alphabet.buildAlphabet26(),
+        rotor1Data = Utils.createSubstitutionMap(defaultAlphabet,
                 "OKXRZMPWGDYQLVBIFJAUSCTHEN");
-        rotor2Data = Utils.createSubstitutionMap(Alphabet.buildAlphabet26(),
+        rotor2Data = Utils.createSubstitutionMap(defaultAlphabet,
                 "OKXRZMPWGDYQLVBIFJAUSCTHEN");
-        reflectorData = Utils.createSubstitutionMap(Alphabet.buildAlphabet26(),
-                "WZXYVUTSRQPONMLKJIHGFEDCBA");
+        reflectorData = Utils.createReflectorSubstitutionMap(Alphabet.buildAlphabet26());
     }
 
 }
