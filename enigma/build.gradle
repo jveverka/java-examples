@@ -15,6 +15,7 @@ repositories {
 }
 
 dependencies {
+   compile 'commons-io:commons-io:2.5'
    testCompile 'org.testng:testng:6.10'
 }
 

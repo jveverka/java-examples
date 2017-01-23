@@ -8,7 +8,9 @@ import itx.java.examples.enigma.impl.alphabet.AlphabetImpl;
  */
 public interface Alphabet {
 
-    public static final String alphabet26 = "ABCDEFGHIJKLMNOPQRSTUVYXZW";
+    public static final String alphabet26 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    public static final String alphabetBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=#";
 
     public int getIndex(Character character);
 
@@ -24,6 +26,10 @@ public interface Alphabet {
 
     public static Alphabet buildAlphabet26() {
         return new AlphabetImpl(Alphabet.alphabet26);
+    }
+
+    public static Alphabet buildAlphabetBase64() {
+        return new AlphabetImpl(Alphabet.alphabetBase64);
     }
 
 }

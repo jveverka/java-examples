@@ -16,7 +16,7 @@ public class AlphabetImpl implements Alphabet {
 
     public AlphabetImpl(String alphabet) {
         if (alphabet.length() % 2 != 0) {
-            throw new UnsupportedOperationException("alphabet length must be divisible by 2");
+            throw new UnsupportedOperationException("alphabet length must be divisible by 2: " + alphabet.length());
         }
         this.alphabet = alphabet;
         this.keys = new ConcurrentHashMap<>();

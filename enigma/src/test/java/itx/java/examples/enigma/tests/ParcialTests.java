@@ -15,13 +15,13 @@ public class ParcialTests {
 
     @Test
     public void testCopyTable() {
-        int[][] copy = Utils.copySubstitutionTable(EnigmaSetup.rotor0Data);
-        Assert.assertTrue(copy.length == EnigmaSetup.rotor0Data.length);
-        Assert.assertTrue(copy[0].length == EnigmaSetup.rotor0Data[0].length);
+        int[][] copy = Utils.copySubstitutionTable(EnigmaSetup.rotor0Data26);
+        Assert.assertTrue(copy.length == EnigmaSetup.rotor0Data26.length);
+        Assert.assertTrue(copy[0].length == EnigmaSetup.rotor0Data26[0].length);
         for (int i=0; i<copy.length; i++) {
             for (int j=0;j<copy[0].length; j++) {
-                Assert.assertTrue(copy[i].length == EnigmaSetup.rotor0Data[i].length);
-                Assert.assertTrue(copy[i][j] == EnigmaSetup.rotor0Data[i][j]);
+                Assert.assertTrue(copy[i].length == EnigmaSetup.rotor0Data26[i].length);
+                Assert.assertTrue(copy[i][j] == EnigmaSetup.rotor0Data26[i][j]);
             }
         }
     }
@@ -56,12 +56,12 @@ public class ParcialTests {
     @Test
     public void testRotorForward() {
         Rotor rotor = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor0Data)
+                .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
                 .build();
-        for (int i=0; i<EnigmaSetup.rotor0Data.length; i++) {
+        for (int i=0; i<EnigmaSetup.rotor0Data26.length; i++) {
             int result = rotor.substituteForward(i);
-            int subtitute = EnigmaSetup.rotor0Data[i][1];
+            int subtitute = EnigmaSetup.rotor0Data26[i][1];
             Assert.assertEquals(subtitute, result);
         }
     }
@@ -69,10 +69,10 @@ public class ParcialTests {
     @Test
     public void testRotor() {
         Rotor rotor = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor0Data)
+                .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
                 .build();
-        for (int i = 0; i < EnigmaSetup.rotor0Data.length; i++) {
+        for (int i = 0; i < EnigmaSetup.rotor0Data26.length; i++) {
             Integer result = rotor.substituteForward(i);
             Integer reverse = rotor.substituteReverse(result);
             Assert.assertEquals(reverse, new Integer(i));
@@ -82,10 +82,10 @@ public class ParcialTests {
     @Test
     public void testShiftedRotor() {
         Rotor rotor = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor0Data)
+                .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(5)
                 .build();
-        for (int i = 0; i < EnigmaSetup.rotor0Data.length; i++) {
+        for (int i = 0; i < EnigmaSetup.rotor0Data26.length; i++) {
             Integer result = rotor.substituteForward(i);
             Integer reverse = rotor.substituteReverse(result);
             Assert.assertEquals(reverse, new Integer(i));
@@ -95,11 +95,11 @@ public class ParcialTests {
     @Test
     public void testReflector() {
         Reflector reflector = Reflector.builder()
-                .setSubstitutionTable(EnigmaSetup.reflectorData)
+                .setSubstitutionTable(EnigmaSetup.reflectorData26)
                 .build();
-        for (int i=0; i<EnigmaSetup.reflectorData.length; i++) {
+        for (int i=0; i<EnigmaSetup.reflectorData26.length; i++) {
             Integer result = reflector.substitute(i);
-            Integer subtitute = EnigmaSetup.reflectorData[i][1];
+            Integer subtitute = EnigmaSetup.reflectorData26[i][1];
             Assert.assertEquals(subtitute, result);
         }
     }
@@ -108,21 +108,21 @@ public class ParcialTests {
     public void testRotorGroup() {
         Rotor[] rotors = new Rotor[3];
         rotors[0] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor0Data)
+                .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
                 .build();
         rotors[1] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor1Data)
+                .setSubstitutionTable(EnigmaSetup.rotor1Data26)
                 .setIndex(0)
                 .build();
         rotors[2] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor2Data)
+                .setSubstitutionTable(EnigmaSetup.rotor2Data26)
                 .setIndex(0)
                 .build();
         RotorGroup rotorGroup = RotorGroup.builder().setRotors(rotors).build();
-        Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData).build();
+        Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData26).build();
 
-        for (int i=0; i<EnigmaSetup.rotor0Data.length; i++) {
+        for (int i=0; i<EnigmaSetup.rotor0Data26.length; i++) {
             Integer result0 = rotorGroup.substituteForward(i);
             Integer reflected0 = reflector.substitute(result0);
             Integer outPut0 = rotorGroup.substituteReverse(reflected0);
@@ -139,22 +139,22 @@ public class ParcialTests {
     public void testRotorGroupRotate() {
         Rotor[] rotors = new Rotor[3];
         rotors[0] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor0Data)
+                .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
                 .build();
         rotors[1] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor1Data)
+                .setSubstitutionTable(EnigmaSetup.rotor1Data26)
                 .setIndex(1)
                 .build();
         rotors[2] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor2Data)
+                .setSubstitutionTable(EnigmaSetup.rotor2Data26)
                 .setIndex(2)
                 .build();
         RotorGroup rotorGroup = RotorGroup.builder().setRotors(rotors).build();
-        Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData).build();
+        Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData26).build();
 
         for (int r=0; r<10; r++) {
-            for (int i = 0; i < EnigmaSetup.rotor0Data.length; i++) {
+            for (int i = 0; i < EnigmaSetup.rotor0Data26.length; i++) {
                 Integer result0 = rotorGroup.substituteForward(i);
                 Integer reflected0 = reflector.substitute(result0);
                 Integer outPut0 = rotorGroup.substituteReverse(reflected0);
@@ -173,19 +173,19 @@ public class ParcialTests {
     public void testRotorGroupRotateSameInput() {
         Rotor[] rotors = new Rotor[3];
         rotors[0] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor0Data)
+                .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
                 .build();
         rotors[1] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor1Data)
+                .setSubstitutionTable(EnigmaSetup.rotor1Data26)
                 .setIndex(1)
                 .build();
         rotors[2] = Rotor.builder()
-                .setSubstitutionTable(EnigmaSetup.rotor2Data)
+                .setSubstitutionTable(EnigmaSetup.rotor2Data26)
                 .setIndex(2)
                 .build();
         RotorGroup rotorGroup = RotorGroup.builder().setRotors(rotors).build();
-        Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData).build();
+        Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData26).build();
 
         int input = 8;
         int encrypted = -1; //encrypted
@@ -211,7 +211,28 @@ public class ParcialTests {
             encryptedOld = encrypted;
             rotorGroup.shift();
         }
+    }
 
+    @Test
+    public void testPrettyPrint() {
+        String data = "FYLDVAEQHMCZNXTKJPWUOGISBRSXROTNJHUBECYWPDGMAFIZVKQLABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String expectedResult = "FYLDV AEQHM CZNXT KJPWU OGISB RSXRO TNJHU BECYW PDGMA FIZVK QLABC DEFGH \n" +
+                "IJKLM NOPQR STUVW XYZAB CDEFG HIJKL MNOPQ RSTUV WXYZA BCDEF GHIJK LMNOP \n" +
+                "QRSTU VWXYZ ABCDE FGHIJ KLMNO PQRST UVWXY Z";
+        String pretty = Utils.prettyPrint(12, data);
+        Assert.assertNotNull(pretty);
+        Assert.assertEquals(pretty, expectedResult);
+    }
+
+    @Test
+    public void testPrettyRead() {
+        String data = "FYLDV AEQHM CZNXT KJPWU OGISB RSXRO TNJHU BECYW PDGMA FIZVK QLABC DEFGH \n" +
+                "IJKLM NOPQR STUVW XYZAB CDEFG HIJKL MNOPQ RSTUV WXYZA BCDEF GHIJK LMNOP \n" +
+                "QRSTU VWXYZ ABCDE FGHIJ KLMNO PQRST UVWXY Z";
+        String expectedResult = "FYLDVAEQHMCZNXTKJPWUOGISBRSXROTNJHUBECYWPDGMAFIZVKQLABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String pretty = Utils.prettyRead(data);
+        Assert.assertNotNull(pretty);
+        Assert.assertEquals(pretty, expectedResult);
     }
 
 }

@@ -1,12 +1,10 @@
 package itx.java.examples.enigma;
 
-import com.sun.javafx.image.IntPixelGetter;
 import itx.java.examples.enigma.alphabet.Alphabet;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by gergej on 17.1.2017.
@@ -58,6 +56,15 @@ public final class Utils {
             result[i][1] = alphabet.getCharacter(randomIndexes[i] + length);
         }
         return result;
+    }
+
+    public static String getRandomizedAlphabet(Alphabet alphabet) {
+        Integer[] indexes = generateRandomIndexes(alphabet.getSize());
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<indexes.length; i++) {
+            sb.append(alphabet.getCharacter(indexes[i]));
+        }
+        return sb.toString();
     }
 
     public static Integer[] generateRandomIndexes(int length) {
@@ -123,6 +130,79 @@ public final class Utils {
             table = shiftSubstitutionTable(table);
         }
         return table;
+    }
+
+    public static String prettyPrint(int columns, String data) {
+        StringBuffer sb = new StringBuffer();
+        int groups = 0;
+        int counter = 1;
+        for (int i=0; i<data.length(); i++) {
+            sb.append(data.charAt(i));
+            if (counter % 5 == 0 ) {
+                sb.append(' ');
+                groups++;
+                counter = 1;
+            } else {
+                counter++;
+            }
+            if (groups >= columns) {
+                sb.append('\n');
+                groups = 0;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String prettyRead(String data) {
+        StringBuffer sb = new StringBuffer();
+        for (int i=0; i<data.length(); i++) {
+           if ('\t' != data.charAt(i) && '\n' != data.charAt(i) && ' ' != data.charAt(i) && '\r' != data.charAt(i)) {
+               sb.append(data.charAt(i));
+           }
+        }
+        return sb.toString().trim();
+    }
+
+    /**
+     * encrypt ordinary unicode java string
+     * @param enigma
+     *   enigma with base64 alphabet
+     * @param input
+     *   ordinary unicode java string
+     * @return
+     *   encrypted string in base64 format
+     */
+    public static String encryptUnicodeString(Enigma enigma, String input) {
+        byte[] inputBytes = Base64.getEncoder().encode(input.getBytes(Charset.forName("UTF-8")));
+        String inputData = new String(inputBytes, Charset.forName("UTF-8"));
+        StringBuffer sb = new StringBuffer();
+        for (int i=0; i<inputData.length(); i++) {
+            sb.append(enigma.encryptOrDecrypt(inputData.charAt(i)));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * decrypt data in base64 format
+     * @param enigma
+     *   enigma with base64 alphabet
+     * @param input
+     *   encrypted data in base64 format
+     * @return
+     *   ordinary unicode java string
+     */
+    public static String decodeBase64String(Enigma enigma, String input) {
+        StringBuffer sb = new StringBuffer();
+        for (int i=0; i<input.length(); i++) {
+            sb.append(enigma.encryptOrDecrypt(input.charAt(i)));
+        }
+        byte[] inputBytes = Base64.getDecoder().decode(sb.toString());
+        return new String(inputBytes, Charset.forName("UTF-8"));
+    }
+
+    public static void main(String[] main) {
+        String randomizedAlphabet = getRandomizedAlphabet(Alphabet.buildAlphabet26());
+        System.out.println(randomizedAlphabet);
     }
 
 }
