@@ -75,9 +75,11 @@ public class EnigmaTest {
         IOUtils.copy(is, writer, Charset.forName("UTF-8"));
         String originalMessage = writer.toString();
         String encryptedMessage = Utils.encryptUnicodeString(enigmaForEncryption, originalMessage);
-        String decryptedMessage = Utils.encryptUnicodeString(enigmaForDecryption, encryptedMessage);
+        String decryptedMessage = Utils.decodeBase64String(enigmaForDecryption, encryptedMessage);
         Assert.assertNotNull(encryptedMessage);
         Assert.assertNotNull(decryptedMessage);
+        String prettyPrint = Utils.prettyPrint(12, encryptedMessage);
+        Assert.assertNotNull(prettyPrint);
         Assert.assertEquals(originalMessage, decryptedMessage);
     }
 
