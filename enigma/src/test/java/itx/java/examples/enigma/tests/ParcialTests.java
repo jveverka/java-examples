@@ -2,6 +2,7 @@ package itx.java.examples.enigma.tests;
 
 import itx.java.examples.enigma.EnigmaSetup;
 import itx.java.examples.enigma.Utils;
+import itx.java.examples.enigma.impl.rotors.RotorGroupBuilder;
 import itx.java.examples.enigma.rotors.Reflector;
 import itx.java.examples.enigma.rotors.Rotor;
 import itx.java.examples.enigma.rotors.RotorGroup;
@@ -106,20 +107,20 @@ public class ParcialTests {
 
     @Test
     public void testRotorGroup() {
-        Rotor[] rotors = new Rotor[3];
-        rotors[0] = Rotor.builder()
+        RotorGroupBuilder rotorBuilder = RotorGroup.builder();
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
-                .build();
-        rotors[1] = Rotor.builder()
+                .build());
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor1Data26)
                 .setIndex(0)
-                .build();
-        rotors[2] = Rotor.builder()
+                .build());
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor2Data26)
                 .setIndex(0)
-                .build();
-        RotorGroup rotorGroup = RotorGroup.builder().setRotors(rotors).build();
+                .build());
+        RotorGroup rotorGroup = rotorBuilder.build();
         Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData26).build();
 
         for (int i=0; i<EnigmaSetup.rotor0Data26.length; i++) {
@@ -137,20 +138,20 @@ public class ParcialTests {
 
     @Test
     public void testRotorGroupRotate() {
-        Rotor[] rotors = new Rotor[3];
-        rotors[0] = Rotor.builder()
+        RotorGroupBuilder rotorBuilder = RotorGroup.builder();
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
-                .build();
-        rotors[1] = Rotor.builder()
+                .build());
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor1Data26)
-                .setIndex(1)
-                .build();
-        rotors[2] = Rotor.builder()
+                .setIndex(0)
+                .build());
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor2Data26)
-                .setIndex(2)
-                .build();
-        RotorGroup rotorGroup = RotorGroup.builder().setRotors(rotors).build();
+                .setIndex(0)
+                .build());
+        RotorGroup rotorGroup = rotorBuilder.build();
         Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData26).build();
 
         for (int r=0; r<10; r++) {
@@ -171,20 +172,20 @@ public class ParcialTests {
 
     @Test
     public void testRotorGroupRotateSameInput() {
-        Rotor[] rotors = new Rotor[3];
-        rotors[0] = Rotor.builder()
+        RotorGroupBuilder rotorBuilder = RotorGroup.builder();
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor0Data26)
                 .setIndex(0)
-                .build();
-        rotors[1] = Rotor.builder()
+                .build());
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor1Data26)
-                .setIndex(1)
-                .build();
-        rotors[2] = Rotor.builder()
+                .setIndex(0)
+                .build());
+        rotorBuilder.addRotor(Rotor.builder()
                 .setSubstitutionTable(EnigmaSetup.rotor2Data26)
-                .setIndex(2)
-                .build();
-        RotorGroup rotorGroup = RotorGroup.builder().setRotors(rotors).build();
+                .setIndex(0)
+                .build());
+        RotorGroup rotorGroup = rotorBuilder.build();
         Reflector reflector = Reflector.builder().setSubstitutionTable(EnigmaSetup.reflectorData26).build();
 
         int input = 8;

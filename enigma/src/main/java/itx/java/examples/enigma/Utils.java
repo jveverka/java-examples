@@ -1,7 +1,12 @@
 package itx.java.examples.enigma;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import itx.java.examples.enigma.alphabet.Alphabet;
+import itx.java.examples.enigma.configuration.EnigmaConfiguration;
+import itx.java.examples.enigma.configuration.EnigmaSettings;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.Random;
@@ -198,6 +203,36 @@ public final class Utils {
         }
         byte[] inputBytes = Base64.getDecoder().decode(sb.toString());
         return new String(inputBytes, Charset.forName("UTF-8"));
+    }
+
+    public static EnigmaConfiguration readEnigmaConfiguration(InputStream is) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(is, EnigmaConfiguration.class);
+    }
+
+    public static EnigmaSettings readEnigmaSetup(InputStream is) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(is, EnigmaSettings.class);
+    }
+
+    public static int factorial(int n) {
+        int fact = 1;
+        for (int i = 1; i <= n; i++) {
+            fact *= i;
+        }
+        return fact;
+    }
+
+    public static boolean compareArrays(int[] data0, int[] data1) {
+        if (data0.length != data1.length) {
+            return false;
+        }
+        for (int i=0; i<data0.length; i++) {
+            if (data0[i] != data1[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static void main(String[] main) {

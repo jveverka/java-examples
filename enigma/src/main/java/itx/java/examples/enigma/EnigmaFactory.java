@@ -36,7 +36,9 @@ public final class EnigmaFactory {
         rotors[1] = rotor1;
         rotors[2] = rotor2;
         RotorGroup rotorGroup = RotorGroup.builder()
-                .setRotors(rotors)
+                .addRotor(rotor0)
+                .addRotor(rotor1)
+                .addRotor(rotor2)
                 .build();
         Reflector reflector = Reflector.builder()
                 .setSubstitutionTable(EnigmaSetup.reflectorData26)
@@ -70,7 +72,9 @@ public final class EnigmaFactory {
         rotors[1] = rotor1;
         rotors[2] = rotor2;
         RotorGroup rotorGroup = RotorGroup.builder()
-                .setRotors(rotors)
+                .addRotor(rotor0)
+                .addRotor(rotor1)
+                .addRotor(rotor2)
                 .build();
         Reflector reflector = Reflector.builder()
                 .setSubstitutionTable(EnigmaSetup.reflectorDataBase64)

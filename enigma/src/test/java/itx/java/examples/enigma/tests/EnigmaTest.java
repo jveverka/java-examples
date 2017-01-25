@@ -4,6 +4,7 @@ import itx.java.examples.enigma.Enigma;
 import itx.java.examples.enigma.EnigmaFactory;
 import itx.java.examples.enigma.Utils;
 import itx.java.examples.enigma.alphabet.Alphabet;
+import itx.java.examples.enigma.configuration.EnigmaConfiguration;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -80,6 +81,35 @@ public class EnigmaTest {
         Assert.assertNotNull(decryptedMessage);
         String prettyPrint = Utils.prettyPrint(12, encryptedMessage);
         Assert.assertNotNull(prettyPrint);
+        Assert.assertEquals(originalMessage, decryptedMessage);
+    }
+
+    @DataProvider(name = "configs")
+    public static Object[][] getConfigs() {
+        return new Object[][]{
+                { "configurations/enigma-test-configuration-26-01.json", "THESECRETMESSAGE", new Boolean(false) },
+                { "configurations/enigma-test-configuration-26-02.json", "TOPSECRETMESSAGE", new Boolean(false) },
+                { "configurations/enigma-test-configuration-base64-01.json", "The Secret Message", new Boolean(true) }
+        };
+    }
+
+    @Test(dataProvider = "configs")
+    public void testEnigmaConfiguration(String configPath, String originalMessage, Boolean useBase64) throws IOException {
+        InputStream is = UtilsTests.class.getClassLoader().getResourceAsStream(configPath);
+        EnigmaConfiguration enigmaConfiguration = Utils.readEnigmaConfiguration(is);
+        Enigma enigmaForEncryption = Enigma.builder().fromConfiguration(enigmaConfiguration).build();
+        Enigma enigmaForDecryption = Enigma.builder().fromConfiguration(enigmaConfiguration).build();
+        String encryptedMessage = null;
+        String decryptedMessage = null;
+        if (useBase64) {
+            encryptedMessage = Utils.encryptUnicodeString(enigmaForEncryption, originalMessage);
+            decryptedMessage = Utils.decodeBase64String(enigmaForDecryption, encryptedMessage);
+        } else {
+            encryptedMessage = Utils.encryptOrDecrypt(enigmaForEncryption, originalMessage);
+            decryptedMessage = Utils.encryptOrDecrypt(enigmaForDecryption, encryptedMessage);
+        }
+        Assert.assertNotNull(encryptedMessage);
+        Assert.assertNotNull(decryptedMessage);
         Assert.assertEquals(originalMessage, decryptedMessage);
     }
 
