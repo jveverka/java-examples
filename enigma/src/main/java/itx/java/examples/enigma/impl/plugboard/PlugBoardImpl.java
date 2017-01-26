@@ -35,7 +35,7 @@ public class PlugBoardImpl implements PlugBoard {
                 return setup[i][0];
             }
         }
-        throw new UnsupportedOperationException("character " + character + " can't be mapped by plugboard !");
+        return character;
     }
 
 }
