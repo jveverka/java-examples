@@ -1,0 +1,33 @@
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+mainClassName = "itx.examples.akka.cluster.sshsessions.Application"
+
+group    = 'itx.examples.akka.cluster'
+version  = '1.0.0'
+
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+   compile 'org.slf4j:slf4j-api:1.7.21'
+   compile 'org.slf4j:slf4j-simple:1.7.24'
+   compile 'com.typesafe.akka:akka-actor_2.12:2.4.14'
+   compile 'com.typesafe.akka:akka-cluster_2.12:2.4.14'
+   compile 'com.typesafe.akka:akka-remote_2.12:2.4.14'
+   compile 'com.typesafe.akka:akka-cluster-tools_2.12:2.4.14'
+   compile 'com.google.guava:guava:21.0'
+   testCompile 'org.testng:testng:6.11'
+   testCompile 'com.jayway.awaitility:awaitility:1.6.5'
+}
+
+jar {
+   baseName = 'sshsessions'
+}
+
