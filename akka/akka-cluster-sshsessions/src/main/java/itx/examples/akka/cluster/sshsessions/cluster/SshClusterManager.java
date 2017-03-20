@@ -77,7 +77,6 @@ public class SshClusterManager {
     public void onSessionCreateRequest(SessionCreateRequest sessionCreateRequest) {
         if (isLeader.get()) {
             String memberAddress = selectClusterMemberForNewSession();
-            LOG.info("selected member for new session: " + memberAddress);
             ActorSelection actorSelection = actorSystem.actorSelection(Utils.getSshSessionCreatorAddress(memberAddress));
             actorSelection.tell(sessionCreateRequest, selfRef);
             //TODO: set timeout (circuit breaker)
@@ -150,6 +149,7 @@ public class SshClusterManager {
                 memberAddress = memberInfo.getMemberAddress();
             }
         }
+        LOG.info("selected node [" + minSessions + "] " + memberAddress);
         return memberAddress;
     }
 
