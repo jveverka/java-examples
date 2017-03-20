@@ -7,6 +7,7 @@ public final class Utils {
 
     public static final String CLUSTER_MANAGER_NAME = "ssh-cluster-manager-actor";
     public static final String SESSION_CREATOR_AGENT_NAME = "ssh-creator-agent";
+    public static final String CLUSTER_NAME = "test-cluster";
 
     public static String getSshClusterManagerAddress(String clusterAddress) {
         return clusterAddress + "/user/" + CLUSTER_MANAGER_NAME;

@@ -10,6 +10,7 @@ package itx.examples.akka.cluster.sshsessions.tests.utils;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
+import itx.examples.akka.cluster.sshsessions.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +27,6 @@ import static com.jayway.awaitility.Awaitility.await;
 public class AkkaTestCluster {
 
     private static final Logger LOG = LoggerFactory.getLogger(AkkaTestCluster.class);
-    private static final String CLUSTER_NAME = "test-cluster";
 
     private int clusterSize;
     private Map<Integer, ClusterObjectRegistry> clusterObjects = new ConcurrentHashMap<>();
@@ -46,10 +46,10 @@ public class AkkaTestCluster {
             final ActorSystem actorSystem;
             if (clusterSize == 1) {
                 actorSystem = ActorSystem.create(
-                        CLUSTER_NAME, ConfigFactory.load("single-node1"));
+                        Utils.CLUSTER_NAME, ConfigFactory.load("single-node1"));
             } else {
                 actorSystem = ActorSystem.create(
-                        CLUSTER_NAME, ConfigFactory.load("node" + i));
+                        Utils.CLUSTER_NAME, ConfigFactory.load("node" + i));
             }
             actorSystem.actorOf(Props.create(clusterStatusObserverActorCreator), "test-cluster-satus-observer");
             clusterObjects.put(i, new ClusterObjectRegistry(i, actorSystem, clusterStatusObserver));

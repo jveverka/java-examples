@@ -9,10 +9,11 @@ import itx.examples.akka.cluster.sshsessions.client.SshClientService;
 import itx.examples.akka.cluster.sshsessions.client.SshClientServiceImpl;
 import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManager;
 import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManagerActorCreator;
-import itx.examples.akka.cluster.sshsessions.sessions.SshSessionActorCreator;
 import itx.examples.akka.cluster.sshsessions.sessions.SshSessionCreatorAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
 
 /**
  * Created by juraj on 3/18/17.
@@ -54,13 +55,31 @@ public class Application {
 
     public static void main(String[] args) {
         LOG.info("Application start ...");
-        String akkaConfigPath = System.getProperty("akka.config.path");
-        String clusterName = System.getProperty("akka.cluster.name");
-        LOG.info("akka.config.path=" + akkaConfigPath);
-        LOG.info("akka.cluster.name=" + clusterName);
-        ActorSystem actorSystem = ActorSystem.create(clusterName, ConfigFactory.load(akkaConfigPath));
+        if (args.length < 1) {
+            LOG.error("Error: expected first parameter /path/to/akka.conf file");
+            System.exit(1);
+        }
+        File akkaConfigFile = new File(args[0]);
+        if (!akkaConfigFile.exists()) {
+            LOG.error("Error: config file not found " + args[0]);
+            System.exit(1);
+        }
+        LOG.info("akkaConfigPath = " + args[0]);
+        ActorSystem actorSystem = ActorSystem.create(Utils.CLUSTER_NAME, ConfigFactory.parseFile(akkaConfigFile));
         Application application = new Application(actorSystem);
         application.init();
+
+        Runtime.getRuntime().addShutdownHook(
+                new Thread() {
+                    public void run() {
+                        LOG.info("shutting down ...");
+                        application.destroy();
+                        actorSystem.shutdown();
+                        LOG.info("bye.");
+                    }
+                }
+        );
+
         LOG.info("started.");
     }
 
