@@ -12,6 +12,8 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -39,11 +41,11 @@ public class ClusterTest {
 
     @Test
     public void testCreateSshSession() throws InterruptedException {
-        LOG.info("testing");
+        LOG.info("testCreateSshSession");
         SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(1).getSingleObject(Application.class).getSshClientService();
         SshClientSessionListenerTestImpl sshClientSessionListenerTest = new SshClientSessionListenerTestImpl();
-        ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
         try {
+            ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
             long duration = System.nanoTime();
             SshClientSession sshClientSession = upcommingSession.get(20, TimeUnit.SECONDS);
             duration = System.nanoTime() - duration;
@@ -66,6 +68,46 @@ public class ClusterTest {
         } catch (Exception e) {
             LOG.error("Exception: ", e);
             Assert.fail();
+        }
+    }
+
+    @Test
+    public void testCreateManySessions() {
+        LOG.info("testCreateSshSession");
+        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(1).getSingleObject(Application.class).getSshClientService();
+        SshClientSessionListenerTestImpl sshClientSessionListenerTest = new SshClientSessionListenerTestImpl();
+        List<SshClientSession> sessions = new ArrayList<>();
+        for (int i=0; i<10; i++) {
+            try {
+                ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
+                SshClientSession sshClientSession = upcommingSession.get(20, TimeUnit.SECONDS);
+                Assert.assertNotNull(sshClientSession);
+                sshClientSessionListenerTest.setDataWait();
+                sshClientSession.sendData("data" + i);
+                String data = sshClientSessionListenerTest.waitForData(20, TimeUnit.SECONDS);
+                Assert.assertEquals(data, "DATA" + i);
+            } catch (InterruptedException e) {
+                LOG.error("InterruptedException: ");
+                Assert.fail();
+            } catch (ExecutionException e) {
+                LOG.error("Execution Exception: ", e.getCause().getMessage());
+                Assert.fail();
+            } catch (TimeoutException e) {
+                LOG.error("Test TIMEOUT");
+                Assert.fail();
+            } catch (Exception e) {
+                LOG.error("Exception: ", e);
+                Assert.fail();
+            }
+
+        }
+        for (SshClientSession session: sessions) {
+            try {
+                session.close();
+            } catch (Exception e) {
+                LOG.error("Exception: ", e);
+                Assert.fail();
+            }
         }
     }
 

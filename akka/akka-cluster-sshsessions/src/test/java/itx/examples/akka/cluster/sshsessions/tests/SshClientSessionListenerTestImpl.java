@@ -41,6 +41,7 @@ public class SshClientSessionListenerTestImpl implements SshClientSessionListene
     }
 
     public void setDataWait() {
+        data = null;
         countDownLatch = new CountDownLatch(1);
     }
 
