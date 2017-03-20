@@ -43,19 +43,20 @@ public class SshClusterManager {
 
     public void setLeaderAddress(String leaderAddress) {
         this.leaderNodeAddress = leaderAddress;
-        if (this.leaderNodeAddress.equals(leaderAddress)) {
+        if (this.selfNodeAddress.equals(leaderAddress)) {
             isLeader.set(true);
-            LOG.info("LEADER: " + leaderNodeAddress);
             pingAllMemberSessions();
         } else {
             isLeader.set(false);
         }
+        printMembers();
     }
 
     public void addMember(String memberAddress, String status) {
         LOG.info("addMember: " + selfNodeAddress + " " + memberAddress + " " + status);
         if (members.get(memberAddress) == null ) {
             members.put(memberAddress, new MemberInfo(memberAddress, 0));
+            printMembers();
             if (isLeader.get()) {
                 pingMemberSessions(memberAddress);
             }
@@ -65,6 +66,7 @@ public class SshClusterManager {
     public void removeMember(String memberAddress, String status) {
         LOG.info("removeMember: " + selfNodeAddress + " " + memberAddress + " " + status);
         members.remove(memberAddress);
+        printMembers();
     }
 
     public void onPongMessage(SessionPongMessage sessionPongMessage) {
@@ -151,6 +153,22 @@ public class SshClusterManager {
         }
         LOG.info("selected node [" + minSessions + "] " + memberAddress);
         return memberAddress;
+    }
+
+    private void printMembers() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n");
+        members.forEach( (k,v) -> {
+           sb.append("  ");
+           sb.append(k.equals(selfNodeAddress)?"->":"  ");
+           sb.append(k.equals(leaderNodeAddress)?"LEADER":"follow");
+           sb.append(" [");
+           sb.append(v.getSessions());
+           sb.append("] ");
+           sb.append(k);
+           sb.append("\n");
+        } );
+        LOG.info(sb.toString());
     }
 
 }
