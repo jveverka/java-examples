@@ -8,10 +8,12 @@ import java.io.Serializable;
 public class SessionCloseResponse implements Serializable {
 
     private String sessionId;
+    private String clientId;
     private String clientActorAddress;
 
-    public SessionCloseResponse(String sessionId, String clientActorAddress) {
+    public SessionCloseResponse(String sessionId, String clientId, String clientActorAddress) {
         this.sessionId = sessionId;
+        this.clientId = clientId;
         this.clientActorAddress = clientActorAddress;
     }
 
@@ -23,4 +25,7 @@ public class SessionCloseResponse implements Serializable {
         return clientActorAddress;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
 }

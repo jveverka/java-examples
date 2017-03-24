@@ -9,7 +9,7 @@ import itx.examples.akka.cluster.sshsessions.client.SshClientService;
 import itx.examples.akka.cluster.sshsessions.client.SshClientServiceImpl;
 import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManager;
 import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManagerActorCreator;
-import itx.examples.akka.cluster.sshsessions.sessions.SshSessionCreatorAgent;
+import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManagerActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ public class Application {
         SshClusterManagerActorCreator sshClusterManagerActorCreator = new SshClusterManagerActorCreator(sshClusterManager);
         sshClusterManagerActor = actorSystem.actorOf(Props.create(sshClusterManagerActorCreator), Utils.CLUSTER_MANAGER_NAME);
 
-        actorSystem.actorOf(Props.create(SshSessionCreatorAgent.class), Utils.SESSION_CREATOR_AGENT_NAME);
+        actorSystem.actorOf(Props.create(SshLocalManagerActor.class), Utils.SESSION_CREATOR_AGENT_NAME);
 
         sshClientService = new SshClientServiceImpl(actorSystem, sshClusterManager);
 

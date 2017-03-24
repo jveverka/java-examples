@@ -41,8 +41,10 @@ public class SshSessionActor extends UntypedActor {
             SessionDataResponse sessionDataResponse = sshSession.processData(sessionDataRequest);
             sender().tell(sessionDataResponse, self());
         } else if (message instanceof SessionCloseRequest) {
+            SessionCloseRequest sessionCloseRequest = (SessionCloseRequest)message;
             sshSession.close();
-            SessionCloseResponse sessionCloseResponse = new SessionCloseResponse(sshSession.getId(), clientActorAddress);
+            SessionCloseResponse sessionCloseResponse = new SessionCloseResponse(sshSession.getId(),
+                    sessionCloseRequest.getClientId(), clientActorAddress);
             sender().tell(sessionCloseResponse, null);
             self().tell(PoisonPill.getInstance(), self());
         } else {

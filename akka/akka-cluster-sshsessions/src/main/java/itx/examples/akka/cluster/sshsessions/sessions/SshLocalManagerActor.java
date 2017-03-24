@@ -16,9 +16,9 @@ import java.util.UUID;
 /**
  * Created by juraj on 3/19/17.
  */
-public class SshSessionCreatorAgent extends UntypedActor {
+public class SshLocalManagerActor extends UntypedActor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SshSessionCreatorAgent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SshLocalManagerActor.class);
 
     @Override
     public void onReceive(Object message) throws Throwable {

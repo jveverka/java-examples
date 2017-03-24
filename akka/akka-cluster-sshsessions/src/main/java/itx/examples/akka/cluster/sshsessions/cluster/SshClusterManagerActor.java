@@ -47,9 +47,6 @@ public class SshClusterManagerActor extends UntypedActor {
             ClusterEvent.MemberWeaklyUp memberWeaklyUp = (ClusterEvent.MemberWeaklyUp)message;
             sshClusterManager.removeMember(memberWeaklyUp.member().address().toString(), "WEAKLY_UP");
 
-        } else if (message instanceof SessionPongMessage) {
-            SessionPongMessage sessionPongMessage = (SessionPongMessage)message;
-            sshClusterManager.onPongMessage(sessionPongMessage);
         } else if (message instanceof SessionCreateRequest) {
             SessionCreateRequest sessionCreateRequest = (SessionCreateRequest)message;
             sshClusterManager.onSessionCreateRequest(sessionCreateRequest);

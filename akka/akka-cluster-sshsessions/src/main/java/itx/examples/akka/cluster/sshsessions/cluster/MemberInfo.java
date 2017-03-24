@@ -1,40 +1,35 @@
 package itx.examples.akka.cluster.sshsessions.cluster;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Created by juraj on 3/18/17.
  */
 public class MemberInfo {
 
     private String memberAddress;
-    private int sessions;
+    private Map<String, SessionInfo> sessions;
 
-    public MemberInfo(String memberAddress, int sessions) {
+    public MemberInfo(String memberAddress) {
         this.memberAddress = memberAddress;
-        this.sessions = sessions;
-    }
-
-    public MemberInfo(MemberInfo memberInfo) {
-        this.memberAddress = memberInfo.memberAddress;
-        this.sessions = memberInfo.sessions;
+        this.sessions = new ConcurrentHashMap<>();
     }
 
     public String getMemberAddress() {
         return memberAddress;
     }
 
-    public int getSessions() {
-        return sessions;
+    public int getSessionCount() {
+        return sessions.size();
     }
 
-    public void incrementSessionCount() {
-        sessions++;
+    public void addSession(SessionInfo sessionInfo) {
+        sessions.put(sessionInfo.getSshSessionId(), sessionInfo);
     }
 
-    public void decrementSessionCount() {
-        sessions--;
-        if (sessions < 0) {
-            sessions = 0;
-        }
+    public void removeSessionBySessionId(String sessionId) {
+        sessions.remove(sessionId);
     }
 
 }
