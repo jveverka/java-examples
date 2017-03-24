@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
-  <!--Created by yEd 3.16.2.1-->
+  <!--Created by yEd 3.17-->
   <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
   <key for="port" id="d1" yfiles.type="portgraphics"/>
   <key for="port" id="d2" yfiles.type="portgeometry"/>
@@ -15,7 +15,6 @@
   <graph edgedefault="directed" id="G">
     <data key="d0"/>
     <node id="n0">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="520.0" width="234.0" x="206.0" y="257.0"/>
@@ -33,7 +32,6 @@
       </data>
     </node>
     <node id="n1">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="188.0" x="232.0" y="386.5"/>
@@ -51,7 +49,6 @@
       </data>
     </node>
     <node id="n2">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="188.0" x="232.0" y="482.5"/>
@@ -69,7 +66,6 @@
       </data>
     </node>
     <node id="n3">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="520.0" width="234.0" x="464.0" y="257.0"/>
@@ -87,7 +83,6 @@
       </data>
     </node>
     <node id="n4">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="178.0" x="490.0" y="386.5"/>
@@ -105,7 +100,6 @@
       </data>
     </node>
     <node id="n5">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="178.0" x="490.0" y="482.5"/>
@@ -124,7 +118,6 @@
       </data>
     </node>
     <node id="n6">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="520.0" width="234.0" x="722.0" y="257.0"/>
@@ -142,7 +135,6 @@
       </data>
     </node>
     <node id="n7">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="178.0" x="748.0" y="386.5"/>
@@ -160,7 +152,6 @@
       </data>
     </node>
     <node id="n8">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="178.0" x="748.0" y="482.5"/>
@@ -178,13 +169,12 @@
       </data>
     </node>
     <node id="n9">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="188.0" x="232.0" y="569.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="2.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="163.251953125" x="12.3740234375" y="12.515625">Ssh Session Creator Agent<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="170.822265625" x="8.5888671875" y="12.515625">Ssh Session Manager Agent<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -196,13 +186,12 @@
       </data>
     </node>
     <node id="n10">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="178.0" x="490.0" y="567.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="2.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="163.251953125" x="7.3740234375" y="12.515625">Ssh Session Creator Agent<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="170.822265625" x="3.5888671875" y="12.515625">Ssh Session Manager Agent<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -214,13 +203,12 @@
       </data>
     </node>
     <node id="n11">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="178.0" x="748.0" y="565.5"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="2.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="163.251953125" x="7.3740234375" y="12.515625">Ssh Session Creator Agent<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="170.822265625" x="3.5888671875" y="12.515625">Ssh Session Manager Agent<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -232,7 +220,6 @@
       </data>
     </node>
     <node id="n12">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="188.0" x="232.0" y="281.0"/>
@@ -251,7 +238,6 @@ id=client1<y:LabelModel>
       </data>
     </node>
     <node id="n13">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="115.0" x="748.0" y="659.5"/>
@@ -270,7 +256,6 @@ id = session1<y:LabelModel>
       </data>
     </node>
     <node id="n14">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="115.0" x="748.0" y="702.5"/>
@@ -289,7 +274,6 @@ id=session1<y:LabelModel>
       </data>
     </node>
     <node id="n15">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="81.0" x="339.0" y="429.5"/>
@@ -309,7 +293,6 @@ id = client1<y:LabelModel>
       </data>
     </node>
     <node id="n16">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="750.0" x="206.0" y="183.0"/>
@@ -327,7 +310,6 @@ id = client1<y:LabelModel>
       </data>
     </node>
     <node id="n17">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="146.0" x="30.0" y="393.0"/>
@@ -346,7 +328,6 @@ create client's actor<y:LabelModel>
       </data>
     </node>
     <node id="n18">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="82.23199844360352" width="288.0" x="997.0" y="413.0"/>
@@ -367,13 +348,14 @@ Keep list of member nodes uptodate<y:LabelModel>
       </data>
     </node>
     <node id="n19">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="30.0" width="288.0" x="997.0" y="572.0"/>
+          <y:Geometry height="56.5" width="288.0" x="997.0" y="558.75"/>
           <y:Fill hasColor="false" transparent="false"/>
           <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="17.96875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="228.578125" x="29.7109375" y="6.015625">create new session actor and session<y:LabelModel>
+          <y:NodeLabel alignment="left" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="45.90625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="238.375" x="24.8125" y="5.296875">create new session actor and sessions
+holds active session count on the node
+close sessions<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
@@ -385,7 +367,6 @@ Keep list of member nodes uptodate<y:LabelModel>
       </data>
     </node>
     <node id="n20">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="288.0" x="997.0" y="666.0"/>
@@ -404,7 +385,6 @@ send data to client<y:LabelModel>
       </data>
     </node>
     <node id="n21">
-      <data key="d5"/>
       <data key="d6">
         <y:SVGNode>
           <y:Geometry height="56.231998443603516" width="35.095298767089844" x="787.9523506164551" y="838.8840007781982"/>
@@ -426,7 +406,6 @@ send data to client<y:LabelModel>
       </data>
     </node>
     <node id="n22">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="288.0" x="997.0" y="709.0"/>
@@ -444,7 +423,6 @@ send data to client<y:LabelModel>
       </data>
     </node>
     <node id="n23">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="56.231998443603516" width="146.0" x="30.0" y="482.5"/>
@@ -465,7 +443,6 @@ forwards it to client
       </data>
     </node>
     <node id="n24">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="70.0" width="146.0" x="36.0" y="254.0"/>
@@ -486,7 +463,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n25">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="43.0" width="115.0" x="221.0" y="816.0"/>
@@ -505,7 +481,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n26">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="115.0" x="221.0" y="865.1159992218018"/>
@@ -523,7 +498,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n27">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="115.0" x="221.0" y="901.2319984436035"/>
@@ -542,7 +516,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n28">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="30.0" x="384.0" y="838.0"/>
@@ -561,7 +534,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n29">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="30.0" x="541.0" y="838.0"/>
@@ -580,7 +552,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n30">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="30.0" x="384.0" y="898.0"/>
@@ -599,7 +570,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n31">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="30.0" x="541.0" y="898.0"/>
@@ -618,7 +588,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <node id="n32">
-      <data key="d5"/>
       <data key="d6">
         <y:ShapeNode>
           <y:Geometry height="30.0" width="115.0" x="221.0" y="937.3479976654053"/>
@@ -636,7 +605,6 @@ closes session<y:LabelModel>
       </data>
     </node>
     <edge id="e0" source="n2" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="-38.0" sy="0.0" tx="-38.0" ty="4.0"/>
@@ -655,7 +623,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e1" source="n5" target="n11">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -676,7 +643,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e2" source="n11" target="n13">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -697,7 +663,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e3" source="n11" target="n5">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="-21.0" sy="10.0" tx="0.0" ty="0.0">
@@ -718,7 +683,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e4" source="n5" target="n15">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -739,7 +703,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e5" source="n1" target="n12">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -760,7 +723,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e6" source="n1" target="n5">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -781,7 +743,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e7" source="n12" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:ArcEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -802,7 +763,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e8" source="n17" target="n1">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -813,7 +773,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e9" source="n18" target="n5">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -826,7 +785,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e10" source="n19" target="n11">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -837,7 +795,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e11" source="n20" target="n13">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -848,7 +805,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e12" source="n14" target="n21">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -867,7 +823,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e13" source="n22" target="n14">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -878,7 +833,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e14" source="n24" target="n12">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="42.0" sy="13.5" tx="0.0" ty="0.0"/>
@@ -889,7 +843,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e15" source="n23" target="n15">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -902,7 +855,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e16" source="n28" target="n29">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -921,7 +873,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e17" source="n30" target="n31">
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -940,7 +891,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e18" source="n15" target="n15">
-      <data key="d9"/>
       <data key="d10">
         <y:SplineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -961,7 +911,6 @@ closes session<y:LabelModel>
       </data>
     </edge>
     <edge id="e19" source="n5" target="n5">
-      <data key="d9"/>
       <data key="d10">
         <y:SplineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
