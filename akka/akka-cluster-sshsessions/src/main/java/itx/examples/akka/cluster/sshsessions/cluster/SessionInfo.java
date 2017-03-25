@@ -7,13 +7,14 @@ public class SessionInfo {
 
     private String clientSessionActorAddress;
     private String clientId;
-    private String sshSessionActorAddress;
+    private String sshLocalSessionManagerActorAddress;
     private String sshSessionId;
 
-    public SessionInfo(String clientSessionActorAddress, String clientId, String sshSessionActorAddress, String sshSessionId) {
+    public SessionInfo(String clientSessionActorAddress, String clientId,
+                       String sshLocalSessionManagerActorAddress, String sshSessionId) {
         this.clientSessionActorAddress = clientSessionActorAddress;
         this.clientId = clientId;
-        this.sshSessionActorAddress = sshSessionActorAddress;
+        this.sshLocalSessionManagerActorAddress = sshLocalSessionManagerActorAddress;
         this.sshSessionId = sshSessionId;
     }
 
@@ -25,11 +26,12 @@ public class SessionInfo {
         return clientId;
     }
 
-    public String getSshSessionActorAddress() {
-        return sshSessionActorAddress;
-    }
-
     public String getSshSessionId() {
         return sshSessionId;
     }
+
+    public String getSshLocalSessionManagerActorAddress() {
+        return sshLocalSessionManagerActorAddress;
+    }
+
 }

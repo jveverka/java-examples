@@ -8,15 +8,21 @@ import java.io.Serializable;
 public class SessionCloseRequest implements Serializable {
 
     private String clientId;
+    private String sshSessionId;
     private String sessionActorAddress;
 
-    public SessionCloseRequest(String clientId, String sessionActorAddress) {
+    public SessionCloseRequest(String clientId, String sshSessionId, String sessionActorAddress) {
         this.clientId = clientId;
+        this.sshSessionId = sshSessionId;
         this.sessionActorAddress = sessionActorAddress;
     }
 
     public String getClientId() {
         return clientId;
+    }
+
+    public String getSshSessionId() {
+        return sshSessionId;
     }
 
     public String getSessionActorAddress() {

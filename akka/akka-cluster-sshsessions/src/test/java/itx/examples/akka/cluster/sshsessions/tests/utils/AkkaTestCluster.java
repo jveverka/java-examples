@@ -65,7 +65,7 @@ public class AkkaTestCluster {
         LOG.info("cluster shutdown ...");
         long duration = System.currentTimeMillis();
         for (ClusterObjectRegistry clusterObjectRegistry: clusterObjects.values()) {
-            clusterObjectRegistry.getActorSystem().shutdown();
+            clusterObjectRegistry.getActorSystem().terminate();
         }
 
         LOG.info("waiting for cluster to shutdown !");

@@ -10,11 +10,14 @@ public class SessionCreateResponse implements Serializable {
     private String sessionId;
     private String clientId;
     private String sessionActorAddress;
+    private String sshLocalSessionManagerActorAddress;
 
-    public SessionCreateResponse(String sessionId, String clientId, String sessionActorAddress) {
+    public SessionCreateResponse(String sessionId, String clientId,
+                                 String sessionActorAddress, String sshLocalSessionManagerActorAddress) {
         this.sessionId = sessionId;
         this.clientId = clientId;
         this.sessionActorAddress = sessionActorAddress;
+        this.sshLocalSessionManagerActorAddress = sshLocalSessionManagerActorAddress;
     }
 
     public String getSessionId() {
@@ -27,6 +30,10 @@ public class SessionCreateResponse implements Serializable {
 
     public String getSessionActorAddress() {
         return sessionActorAddress;
+    }
+
+    public String getSshLocalSessionManagerActorAddress() {
+        return sshLocalSessionManagerActorAddress;
     }
 
 }

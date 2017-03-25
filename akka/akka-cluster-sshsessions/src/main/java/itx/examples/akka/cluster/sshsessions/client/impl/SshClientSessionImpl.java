@@ -21,17 +21,20 @@ public class SshClientSessionImpl implements SshClientSession {
     private ActorRef sshSessionActor;
     private SshClientServiceImpl sshClientService;
     private String sessionActorAddress;
+    private String sshSessionId;
 
-    public SshClientSessionImpl(String id, SshClientSessionListener sshClientSessionListener, ActorRef sshClientActor, SshClientServiceImpl sshClientService) {
+    public SshClientSessionImpl(String id, SshClientSessionListener sshClientSessionListener,
+                                ActorRef sshClientActor, SshClientServiceImpl sshClientService) {
         this.id = id;
         this.sshClientSessionListener = sshClientSessionListener;
         this.sshClientActor = sshClientActor;
         this.sshClientService = sshClientService;
     }
 
-    public void setSshSessionActor(ActorRef sshSessionActor, String sessionActorAddress) {
+    public void setSshSessionActor(ActorRef sshSessionActor, String sessionActorAddress, String sshSessionId) {
         this.sshSessionActor = sshSessionActor;
         this.sessionActorAddress = sessionActorAddress;
+        this.sshSessionId = sshSessionId;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class SshClientSessionImpl implements SshClientSession {
 
     @Override
     public void close() throws Exception {
-        sshClientService.onCloseSessionRequest(id, sessionActorAddress);
+        sshClientService.onCloseSessionRequest(id, sessionActorAddress, sshSessionId);
     }
 
     public void onDataReceived(String data) {

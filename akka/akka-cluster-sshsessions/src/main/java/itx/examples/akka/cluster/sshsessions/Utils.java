@@ -6,7 +6,7 @@ package itx.examples.akka.cluster.sshsessions;
 public final class Utils {
 
     public static final String CLUSTER_MANAGER_NAME = "ssh-cluster-manager-actor";
-    public static final String SESSION_CREATOR_AGENT_NAME = "ssh-local-manager-actor";
+    public static final String LOCAL_MANAGER_NAME = "ssh-local-manager-actor";
     public static final String CLUSTER_NAME = "test-cluster";
 
     public static String getSshClusterManagerAddress(String clusterAddress) {
@@ -25,8 +25,8 @@ public final class Utils {
         return clusterAddress + "/user/ssh-session-*";
     }
 
-    public static String getSshSessionCreatorAddress(String clusterAddress) {
-        return clusterAddress + "/user/" + SESSION_CREATOR_AGENT_NAME;
+    public static String getSshLocalManagerActorAddress(String clusterAddress) {
+        return clusterAddress + "/user/" + LOCAL_MANAGER_NAME;
     }
 
     public static String generateClientActorName(String clientId) {

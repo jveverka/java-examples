@@ -37,7 +37,7 @@ public class Application {
         SshClusterManagerActorCreator sshClusterManagerActorCreator = new SshClusterManagerActorCreator(sshClusterManager);
         sshClusterManagerActor = actorSystem.actorOf(Props.create(sshClusterManagerActorCreator), Utils.CLUSTER_MANAGER_NAME);
 
-        actorSystem.actorOf(Props.create(SshLocalManagerActor.class), Utils.SESSION_CREATOR_AGENT_NAME);
+        actorSystem.actorOf(Props.create(SshLocalManagerActor.class), Utils.LOCAL_MANAGER_NAME);
 
         sshClientService = new SshClientServiceImpl(actorSystem, sshClusterManager);
 
@@ -74,7 +74,7 @@ public class Application {
                     public void run() {
                         LOG.info("shutting down ...");
                         application.destroy();
-                        actorSystem.shutdown();
+                        actorSystem.terminate();
                         LOG.info("bye.");
                     }
                 }

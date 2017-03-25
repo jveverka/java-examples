@@ -46,7 +46,7 @@ public class SshClusterManager {
         if (this.selfNodeAddress.equals(leaderAddress)) {
             isLeader.set(true);
             //TODO: get session info from local managers
-            //pingAllMemberSessions();
+            requestAllMemberSessions();
         } else {
             isLeader.set(false);
         }
@@ -60,21 +60,24 @@ public class SshClusterManager {
             printMembers();
             if (isLeader.get()) {
                 //TODO: get session info from local managers
-                //pingMemberSessions(memberAddress);
+                requestMemberSessions(memberAddress);
             }
         }
     }
 
     public void removeMember(String memberAddress, String status) {
         LOG.info("removeMember: " + selfNodeAddress + " " + memberAddress + " " + status);
-        members.remove(memberAddress);
+        MemberInfo removedMember = members.remove(memberAddress);
         printMembers();
+        if (isLeader.get() && removedMember != null) {
+            killOrphanedClientsAndSessions(removedMember);
+        }
     }
 
     public void onSessionCreateRequest(SessionCreateRequest sessionCreateRequest) {
         if (isLeader.get()) {
             String memberAddress = selectClusterMemberForNewSession();
-            ActorSelection actorSelection = actorSystem.actorSelection(Utils.getSshSessionCreatorAddress(memberAddress));
+            ActorSelection actorSelection = actorSystem.actorSelection(Utils.getSshLocalManagerActorAddress(memberAddress));
             actorSelection.tell(sessionCreateRequest, selfRef);
             //TODO: set timeout (circuit breaker)
             SessionCreateInfo sessionCreateInfo =
@@ -90,7 +93,7 @@ public class SshClusterManager {
             if (sessionCreateInfo != null) {
                 SessionInfo sessionInfo = new SessionInfo(null,
                         sessionCreateResponse.getClientId(),
-                        sessionCreateResponse.getSessionActorAddress(),
+                        sessionCreateResponse.getSshLocalSessionManagerActorAddress(),
                         sessionCreateResponse.getSessionId());
                 members.get(sessionCreateInfo.getMemberAddress()).addSession(sessionInfo);  //.incrementSessionCount();
                 actorSystem.actorSelection(sessionCreateInfo.getClientActorAddress()).tell(sessionCreateResponse, selfRef);
@@ -102,8 +105,14 @@ public class SshClusterManager {
         if (isLeader.get()) {
             LOG.info("session close request: " + sessionCloseRequest.getSessionActorAddress());
             pendingCloseSessionRequests.put(sessionCloseRequest.getClientId(), sessionCloseRequest);
-            ActorSelection actorSelection = actorSystem.actorSelection(sessionCloseRequest.getSessionActorAddress());
-            actorSelection.tell(sessionCloseRequest, selfRef);
+            for (MemberInfo mi: members.values()) {
+                String localManagerAddress = mi.getSshSessionLocalManagerAddress(sessionCloseRequest.getSshSessionId());
+                if (localManagerAddress != null) {
+                    ActorSelection actorSelection = actorSystem.actorSelection(localManagerAddress);
+                    actorSelection.tell(sessionCloseRequest, selfRef);
+                    break;
+                }
+            }
         }
     }
 
@@ -118,9 +127,26 @@ public class SshClusterManager {
                         break;
                     }
                 }
+                ActorSelection actorSelection = actorSystem.actorSelection(sessionCloseResponse.getClientActorAddress());
+                actorSelection.tell(sessionCloseResponse, selfRef);
             }
-            ActorSelection actorSelection = actorSystem.actorSelection(sessionCloseResponse.getClientActorAddress());
-            actorSelection.tell(sessionCloseResponse, selfRef);
+        }
+    }
+
+    public void onActiveSessionsResponse(GetActiveSessionsResponse activeSessionsResponse) {
+        if (isLeader.get()) {
+            LOG.info("onActiveSessionsResponse: [" + activeSessionsResponse.getActiveSessions().size() + "] "
+                    + activeSessionsResponse.getMemberAddress());
+            MemberInfo memberInfo = members.get(activeSessionsResponse.getMemberAddress());
+            if (memberInfo != null) {
+                activeSessionsResponse.getActiveSessions().forEach( si -> {
+                    String sshLocalSessionManagerActorAddress =
+                            Utils.getSshLocalManagerActorAddress(activeSessionsResponse.getMemberAddress());
+                    SessionInfo sessionInfo = new SessionInfo(si.getClientSessionActorAddress(), si.getClientId(),
+                            sshLocalSessionManagerActorAddress, si.getSessionId());
+                    memberInfo.addSession(sessionInfo);
+                });
+            }
         }
     }
 
@@ -130,6 +156,21 @@ public class SshClusterManager {
 
     public String getSelfNodeAddress() {
         return selfNodeAddress;
+    }
+
+    private void requestAllMemberSessions() {
+        members.values().forEach( m -> {
+            requestMemberSessions(m.getMemberAddress());
+        });
+    }
+
+    private void requestMemberSessions(String memberAddress) {
+        actorSystem.actorSelection(Utils.getSshLocalManagerActorAddress(memberAddress))
+                .tell(new GetActiveSessionsRequest(), selfRef);
+    }
+
+    private void killOrphanedClientsAndSessions(MemberInfo removedMember) {
+        //TODO: close orphaned clients and sessions
     }
 
     private String selectClusterMemberForNewSession() {

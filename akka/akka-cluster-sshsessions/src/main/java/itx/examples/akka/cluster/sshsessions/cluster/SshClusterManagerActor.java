@@ -56,12 +56,12 @@ public class SshClusterManagerActor extends UntypedActor {
         } else if (message instanceof SessionCloseRequest) {
             SessionCloseRequest sessionCloseRequest = (SessionCloseRequest) message;
             sshClusterManager.onSessionCloseRequest(sessionCloseRequest);
-        } else if (message instanceof SessionCloseRequest) {
-            SessionCloseRequest sessionCloseRequest = (SessionCloseRequest) message;
-            sshClusterManager.onSessionCloseRequest(sessionCloseRequest);
         } else if (message instanceof SessionCloseResponse) {
             SessionCloseResponse sessionCloseResponse = (SessionCloseResponse) message;
             sshClusterManager.onSessionCloseResponse(sessionCloseResponse);
+        } else if (message instanceof GetActiveSessionsResponse) {
+            GetActiveSessionsResponse getActiveSessionsResponse = (GetActiveSessionsResponse)message;
+            sshClusterManager.onActiveSessionsResponse(getActiveSessionsResponse);
 
         } else {
             LOG.info("onReceive: " + message.getClass().getName());

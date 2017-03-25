@@ -67,7 +67,7 @@ public class SshClientServiceImpl implements SshClientService {
         SessionCreateInfo sessionCreateInfo = pendingSessionCreateRequests.remove(clientId);
         if (sessionCreateInfo != null) {
             SettableFuture<SshClientSession> upcommingSession = sessionCreateInfo.getSessionSettableFuture();
-            sessionCreateInfo.getSshClientSession().setSshSessionActor(sshSessionActor, sessionActorAddress);
+            sessionCreateInfo.getSshClientSession().setSshSessionActor(sshSessionActor, sessionActorAddress, sshSessionId);
             activeClientSessions.put(clientId, sessionCreateInfo.getSshClientSession());
             upcommingSession.set(sessionCreateInfo.getSshClientSession());
         }
@@ -89,12 +89,12 @@ public class SshClientServiceImpl implements SshClientService {
         }
     }
 
-    public void onCloseSessionRequest(String clientId, String sessionActorAddress) {
+    public void onCloseSessionRequest(String clientId, String sessionActorAddress, String sshSessionId) {
         LOG.info("onCloseSessionRequest: " + clientId);
         SshClientSessionImpl sessionToRemove = activeClientSessions.remove(clientId);
         sessionToRemove.onClose();
         String cmLeaderAddress = sshClusterManager.getSshClusterManagerLeaderAddress();
-        SessionCloseRequest sessionCloseRequest = new SessionCloseRequest(clientId, sessionActorAddress);
+        SessionCloseRequest sessionCloseRequest = new SessionCloseRequest(clientId, sessionActorAddress, sshSessionId);
         actorSystem.actorSelection(cmLeaderAddress).tell(sessionCloseRequest, null);
     }
 
