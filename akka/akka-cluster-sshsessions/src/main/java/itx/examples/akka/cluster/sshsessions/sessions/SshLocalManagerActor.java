@@ -36,22 +36,7 @@ public class SshLocalManagerActor extends UntypedActor {
     public void onReceive(Object message) throws Throwable {
         if (message instanceof SessionCreateRequest) {
             SessionCreateRequest sessionCreateRequest = (SessionCreateRequest) message;
-            String sessionId = UUID.randomUUID().toString();
-
-            //1. create session objects and actor
-            SshSessionImpl sshSession = new SshSessionImpl(sessionId, null);
-            ActorRef sshSessionActorRef = context().system().actorOf(Props.create(
-                    SshSessionActor.class, sshSession, sessionCreateRequest.getClientActorAddress()),
-                    Utils.generateSessionActorName(sessionId));
-
-            //2. notify creator about ssh session creation result
-            String sessionActorAddress = Utils.getSshSessionAddress(nodeAddress, sshSession.getId());
-            SessionCreateResponse sessionCreateResponse =
-                    new SessionCreateResponse(sshSession.getId(),
-                            sessionCreateRequest.getClientId(), sessionActorAddress,
-                            Utils.getSshLocalManagerActorAddress(nodeAddress));
-            sender().tell(sessionCreateResponse, self());
-            localManager.onSessionCreateResquest(sshSession, sshSessionActorRef, sessionCreateRequest);
+            localManager.onSessionCreateResquest(context(), sender(), self(), sessionCreateRequest);
         } else if (message instanceof SessionCloseRequest) {
             SessionCloseRequest sessionCloseRequest = (SessionCloseRequest)message;
             localManager.onSessionCloseRequest(self(), sender(), sessionCloseRequest);

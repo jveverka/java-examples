@@ -4,6 +4,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 import itx.examples.akka.cluster.sshsessions.Application;
 import itx.examples.akka.cluster.sshsessions.client.SshClientService;
 import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
+import itx.examples.akka.cluster.sshsessions.tests.mock.SshSessionFactoryImpl;
+import itx.examples.akka.cluster.sshsessions.sessions.SshSessionFactory;
 import itx.examples.akka.cluster.sshsessions.tests.utils.AkkaTestCluster;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +33,11 @@ public class ClusterTest {
     @BeforeClass
     private void init() throws IOException {
         LOG.info("test init");
+        SshSessionFactory sshSessionFactory = new SshSessionFactoryImpl();
         akkaTestCluster = new AkkaTestCluster(CLUSTER_SIZE);
         akkaTestCluster.startCluster(20, TimeUnit.SECONDS);
         for (int i=0; i<CLUSTER_SIZE; i++) {
-            Application application = new Application(akkaTestCluster.getClusterObjectRegistry(i).getActorSystem());
+            Application application = new Application(akkaTestCluster.getClusterObjectRegistry(i).getActorSystem(), sshSessionFactory);
             application.init();
             akkaTestCluster.getClusterObjectRegistry(i).registerSingleObject(Application.class, application);
         }

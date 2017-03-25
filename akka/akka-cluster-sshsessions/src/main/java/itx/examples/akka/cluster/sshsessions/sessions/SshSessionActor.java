@@ -3,6 +3,7 @@ package itx.examples.akka.cluster.sshsessions.sessions;
 import akka.actor.PoisonPill;
 import akka.actor.UntypedActor;
 import akka.cluster.Cluster;
+import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
 import itx.examples.akka.cluster.sshsessions.dto.*;
 import itx.examples.akka.cluster.sshsessions.mock.SshSessionImpl;
 import org.slf4j.Logger;
@@ -15,12 +16,15 @@ public class SshSessionActor extends UntypedActor {
 
     private static final Logger LOG = LoggerFactory.getLogger(SshSessionActor.class);
 
-    private SshSessionImpl sshSession;
+    private SshClientSession sshSession;
     private String clientActorAddress;
+    private SshClientSessionListenerImpl sshClientSessionListener;
 
-    public SshSessionActor(SshSessionImpl sshSession, String clientActorAddress) {
+    public SshSessionActor(SshClientSession sshSession,
+                           String clientActorAddress, SshClientSessionListenerImpl sshClientSessionListener) {
         this.sshSession = sshSession;
         this.clientActorAddress = clientActorAddress;
+        this.sshClientSessionListener = sshClientSessionListener;
     }
 
     @Override
@@ -31,15 +35,13 @@ public class SshSessionActor extends UntypedActor {
     public void onReceive(Object message) throws Throwable {
         if (message instanceof SessionDataRequest) {
             SessionDataRequest sessionDataRequest = (SessionDataRequest) message;
-            SessionDataResponse sessionDataResponse = sshSession.processData(sessionDataRequest);
-            context().sender().tell(sessionDataResponse, self());
+            sshSession.sendData(sessionDataRequest.getData());
+            String dataOut = sshClientSessionListener.awaitData();
+            SessionDataResponse sessionDataResponse = new SessionDataResponse(dataOut);
+            sender().tell(sessionDataResponse, self());
         } else if (message instanceof SessionPingMessage) {
             String memberAddress = Cluster.get(context().system()).selfAddress().toString();
             context().sender().tell(new SessionPongMessage(memberAddress, sshSession.getId()), self());
-        } else if (message instanceof SessionDataRequest) {
-            SessionDataRequest sessionDataRequest = (SessionDataRequest)message;
-            SessionDataResponse sessionDataResponse = sshSession.processData(sessionDataRequest);
-            sender().tell(sessionDataResponse, self());
         } else if (message instanceof SessionCloseRequest) {
             SessionCloseRequest sessionCloseRequest = (SessionCloseRequest)message;
             sshSession.close();

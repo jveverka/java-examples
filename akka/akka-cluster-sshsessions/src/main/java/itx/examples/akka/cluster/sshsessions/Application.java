@@ -13,6 +13,8 @@ import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManagerActor;
 import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManager;
 import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManagerImpl;
 import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManagerActor;
+import itx.examples.akka.cluster.sshsessions.sessions.SshSessionFactory;
+import itx.examples.akka.cluster.sshsessions.sessions.ssh.SshSessionFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,9 +34,11 @@ public class Application {
 
     private SshClusterManagerImpl sshClusterManager;
     private SshLocalManagerImpl sshLocalManager;
+    private SshSessionFactory sshSessionFactory;
 
-    public Application(ActorSystem actorSystem) {
+    public Application(ActorSystem actorSystem, SshSessionFactory sshSessionFactory) {
         this.actorSystem = actorSystem;
+        this.sshSessionFactory = sshSessionFactory;
     }
 
     public void init() {
@@ -44,7 +48,7 @@ public class Application {
         sshClusterManagerActor = actorSystem.actorOf(
                 Props.create(SshClusterManagerActor.class, sshClusterManager), Utils.CLUSTER_MANAGER_NAME);
 
-        sshLocalManager = new SshLocalManagerImpl();
+        sshLocalManager = new SshLocalManagerImpl(sshSessionFactory);
         sshLocalManagerActor = actorSystem.actorOf(
                 Props.create(SshLocalManagerActor.class, sshLocalManager), Utils.LOCAL_MANAGER_NAME);
 
@@ -84,7 +88,8 @@ public class Application {
         }
         LOG.info("akkaConfigPath = " + args[0]);
         ActorSystem actorSystem = ActorSystem.create(Utils.CLUSTER_NAME, ConfigFactory.parseFile(akkaConfigFile));
-        Application application = new Application(actorSystem);
+        SshSessionFactory sshSessionFactory = new SshSessionFactoryImpl();
+        Application application = new Application(actorSystem, sshSessionFactory);
         application.init();
 
         Runtime.getRuntime().addShutdownHook(

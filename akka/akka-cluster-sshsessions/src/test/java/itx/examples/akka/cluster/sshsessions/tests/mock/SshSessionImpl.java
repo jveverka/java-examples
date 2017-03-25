@@ -1,4 +1,4 @@
-package itx.examples.akka.cluster.sshsessions.mock;
+package itx.examples.akka.cluster.sshsessions.tests.mock;
 
 import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
 import itx.examples.akka.cluster.sshsessions.client.SshClientSessionListener;
@@ -29,7 +29,9 @@ public class SshSessionImpl implements SshClientSession {
 
     @Override
     public void sendData(String data) {
-
+        if (listener != null) {
+            listener.onData(data.toUpperCase());
+        }
     }
 
     @Override
