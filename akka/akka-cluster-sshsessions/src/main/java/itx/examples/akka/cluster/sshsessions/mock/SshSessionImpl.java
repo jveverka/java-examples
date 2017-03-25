@@ -1,5 +1,7 @@
 package itx.examples.akka.cluster.sshsessions.mock;
 
+import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
+import itx.examples.akka.cluster.sshsessions.client.SshClientSessionListener;
 import itx.examples.akka.cluster.sshsessions.dto.SessionDataRequest;
 import itx.examples.akka.cluster.sshsessions.dto.SessionDataResponse;
 import org.slf4j.Logger;
@@ -8,14 +10,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Created by juraj on 3/18/17.
  */
-public class SshSessionImpl implements SshSession {
+public class SshSessionImpl implements SshClientSession {
 
     private static final Logger LOG = LoggerFactory.getLogger(SshSessionImpl.class);
 
     private String id;
+    private SshClientSessionListener listener;
 
-    public SshSessionImpl(String id) {
+    public SshSessionImpl(String id, SshClientSessionListener listener) {
         this.id = id;
+        this.listener = listener;
     }
 
     @Override
@@ -24,14 +28,17 @@ public class SshSessionImpl implements SshSession {
     }
 
     @Override
-    public SessionDataResponse processData(SessionDataRequest sessionDataRequest) {
-        LOG.info("processData: " + sessionDataRequest.getData());
-        return new SessionDataResponse(sessionDataRequest.getData().toUpperCase());
+    public void sendData(String data) {
+
     }
 
     @Override
     public void close() throws Exception {
         LOG.info("close: " + id);
+    }
+
+    public SessionDataResponse processData(SessionDataRequest sessionDataRequest) {
+        return new SessionDataResponse(sessionDataRequest.getData().toUpperCase());
     }
 
 }

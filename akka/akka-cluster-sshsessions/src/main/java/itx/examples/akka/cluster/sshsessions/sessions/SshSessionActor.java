@@ -4,7 +4,7 @@ import akka.actor.PoisonPill;
 import akka.actor.UntypedActor;
 import akka.cluster.Cluster;
 import itx.examples.akka.cluster.sshsessions.dto.*;
-import itx.examples.akka.cluster.sshsessions.mock.SshSession;
+import itx.examples.akka.cluster.sshsessions.mock.SshSessionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,10 +15,10 @@ public class SshSessionActor extends UntypedActor {
 
     private static final Logger LOG = LoggerFactory.getLogger(SshSessionActor.class);
 
-    private SshSession sshSession;
+    private SshSessionImpl sshSession;
     private String clientActorAddress;
 
-    public SshSessionActor(SshSession sshSession, String clientActorAddress) {
+    public SshSessionActor(SshSessionImpl sshSession, String clientActorAddress) {
         this.sshSession = sshSession;
         this.clientActorAddress = clientActorAddress;
     }

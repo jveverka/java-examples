@@ -8,7 +8,10 @@ import com.typesafe.config.ConfigFactory;
 import itx.examples.akka.cluster.sshsessions.client.SshClientService;
 import itx.examples.akka.cluster.sshsessions.client.SshClientServiceImpl;
 import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManager;
-import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManagerActorCreator;
+import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManagerImpl;
+import itx.examples.akka.cluster.sshsessions.cluster.SshClusterManagerActor;
+import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManager;
+import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManagerImpl;
 import itx.examples.akka.cluster.sshsessions.sessions.SshLocalManagerActor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +30,9 @@ public class Application {
     private ActorRef sshLocalManagerActor;
     private SshClientService sshClientService;
 
+    private SshClusterManagerImpl sshClusterManager;
+    private SshLocalManagerImpl sshLocalManager;
+
     public Application(ActorSystem actorSystem) {
         this.actorSystem = actorSystem;
     }
@@ -34,13 +40,13 @@ public class Application {
     public void init() {
         LOG.info("Application init ...");
 
-        SshClusterManager sshClusterManager = new SshClusterManager();
-        SshClusterManagerActorCreator sshClusterManagerActorCreator = new SshClusterManagerActorCreator(sshClusterManager);
+        sshClusterManager = new SshClusterManagerImpl();
         sshClusterManagerActor = actorSystem.actorOf(
-                Props.create(sshClusterManagerActorCreator), Utils.CLUSTER_MANAGER_NAME);
+                Props.create(SshClusterManagerActor.class, sshClusterManager), Utils.CLUSTER_MANAGER_NAME);
 
+        sshLocalManager = new SshLocalManagerImpl();
         sshLocalManagerActor = actorSystem.actorOf(
-                Props.create(SshLocalManagerActor.class), Utils.LOCAL_MANAGER_NAME);
+                Props.create(SshLocalManagerActor.class, sshLocalManager), Utils.LOCAL_MANAGER_NAME);
 
         sshClientService = new SshClientServiceImpl(actorSystem, sshClusterManager);
 
@@ -55,6 +61,14 @@ public class Application {
 
     public SshClientService getSshClientService() {
         return sshClientService;
+    }
+
+    public SshLocalManager getSshLocalManager() {
+        return sshLocalManager;
+    }
+
+    public SshClusterManager getSshClusterManager() {
+        return sshClusterManager;
     }
 
     public static void main(String[] args) {

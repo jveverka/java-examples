@@ -14,10 +14,10 @@ public class SshClusterManagerActor extends UntypedActor {
 
     private static final Logger LOG = LoggerFactory.getLogger(SshClusterManagerActor.class);
 
-    private SshClusterManager sshClusterManager;
+    private SshClusterManagerImpl sshClusterManager;
     private Cluster cluster;
 
-    public SshClusterManagerActor(SshClusterManager sshClusterManager) {
+    public SshClusterManagerActor(SshClusterManagerImpl sshClusterManager) {
         this.sshClusterManager = sshClusterManager;
         this.cluster = Cluster.get(getContext().system());
         sshClusterManager.setContext(getContext().system(), self(), cluster.selfAddress().toString());

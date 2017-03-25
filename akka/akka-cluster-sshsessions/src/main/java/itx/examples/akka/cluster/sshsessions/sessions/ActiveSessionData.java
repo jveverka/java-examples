@@ -1,23 +1,27 @@
 package itx.examples.akka.cluster.sshsessions.sessions;
 
 import akka.actor.ActorRef;
+import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
 
 /**
  * Created by gergej on 25.3.2017.
  */
-public class ActiveSessionInfo {
+public class ActiveSessionData {
 
     private String sessionId;
     private ActorRef sessionActor;
     private String clientId;
     private String clientSessionActorAddress;
+    private SshClientSession sshSession;
 
-    public ActiveSessionInfo(String sessionId, ActorRef sessionActor,
-                             String clientId, String clientSessionActorAddress) {
+    public ActiveSessionData(String sessionId, ActorRef sessionActor,
+                             String clientId, String clientSessionActorAddress,
+                             SshClientSession sshSession) {
         this.sessionId = sessionId;
         this.sessionActor = sessionActor;
         this.clientId = clientId;
         this.clientSessionActorAddress = clientSessionActorAddress;
+        this.sshSession = sshSession;
     }
 
     public String getSessionId() {
@@ -34,6 +38,10 @@ public class ActiveSessionInfo {
 
     public String getClientSessionActorAddress() {
         return clientSessionActorAddress;
+    }
+
+    public SshClientSession getSshSession() {
+        return sshSession;
     }
 
 }
