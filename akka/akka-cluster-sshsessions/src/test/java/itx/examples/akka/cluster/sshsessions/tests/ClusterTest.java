@@ -12,6 +12,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -28,11 +29,11 @@ public class ClusterTest {
     private static final int CLUSTER_SIZE = 3;
 
     @BeforeClass
-    private void init() {
+    private void init() throws IOException {
         LOG.info("test init");
         akkaTestCluster = new AkkaTestCluster(CLUSTER_SIZE);
         akkaTestCluster.startCluster(20, TimeUnit.SECONDS);
-        for (int i=1; i<=CLUSTER_SIZE; i++) {
+        for (int i=0; i<CLUSTER_SIZE; i++) {
             Application application = new Application(akkaTestCluster.getClusterObjectRegistry(i).getActorSystem());
             application.init();
             akkaTestCluster.getClusterObjectRegistry(i).registerSingleObject(Application.class, application);
@@ -42,7 +43,7 @@ public class ClusterTest {
     @Test
     public void testCreateSshSession() throws InterruptedException {
         LOG.info("testCreateSshSession");
-        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(1).getSingleObject(Application.class).getSshClientService();
+        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(0).getSingleObject(Application.class).getSshClientService();
         SshClientSessionListenerTestImpl sshClientSessionListenerTest = new SshClientSessionListenerTestImpl();
         try {
             ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
@@ -74,7 +75,7 @@ public class ClusterTest {
     @Test
     public void testCreateManySessions() {
         LOG.info("testCreateSshSession");
-        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(1).getSingleObject(Application.class).getSshClientService();
+        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(0).getSingleObject(Application.class).getSshClientService();
         SshClientSessionListenerTestImpl sshClientSessionListenerTest = new SshClientSessionListenerTestImpl();
         List<SshClientSession> sessions = new ArrayList<>();
         for (int i=0; i<10; i++) {
@@ -114,7 +115,7 @@ public class ClusterTest {
     @AfterClass
     private void destroy() {
         try {
-            for (int i=1; i<=CLUSTER_SIZE; i++) {
+            for (int i=0; i<CLUSTER_SIZE; i++) {
                 Application application = akkaTestCluster.getClusterObjectRegistry(i).getSingleObject(Application.class);
                 application.destroy();
             }

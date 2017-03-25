@@ -14,7 +14,14 @@ import itx.examples.akka.cluster.sshsessions.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -27,32 +34,50 @@ import static com.jayway.awaitility.Awaitility.await;
 public class AkkaTestCluster {
 
     private static final Logger LOG = LoggerFactory.getLogger(AkkaTestCluster.class);
+    public static final String DEFAULT_HOST_NAME = "127.0.0.1";
+    public static final int DEFAULT_PORT = 2552;
 
     private int clusterSize;
+    private List<ClusterNode> nodes;
     private Map<Integer, ClusterObjectRegistry> clusterObjects = new ConcurrentHashMap<>();
     private boolean clusterStarted;
+    private String seedNodeListString;
 
     public AkkaTestCluster(int clusterSize) {
         this.clusterSize = clusterSize;
+        this.nodes = new ArrayList<>();
+        for (int i=0; i<clusterSize; i++) {
+            ClusterNode clusterNode = new ClusterNode(DEFAULT_HOST_NAME, DEFAULT_PORT + i);
+            nodes.add(clusterNode);
+        }
+        String[] seedNodeList = new String[clusterSize];
+        for (int i=0; i<clusterSize; i++) {
+            seedNodeList[i] = generateNodeAddress(
+                    Utils.CLUSTER_NAME,
+                    nodes.get(i).getHostName(),
+                    nodes.get(i).getPort());
+        }
+        seedNodeListString = String.join(",\n",seedNodeList);
     }
 
-    public void startCluster(long timeoutWaitForLeader, TimeUnit timeUnit) {
+    public void startCluster(long timeoutWaitForLeader, TimeUnit timeUnit) throws IOException {
         LOG.info("starting akka cluster ...");
         long duration = System.currentTimeMillis();
         ClusterStatusObserver clusterStatusObserver = new ClusterStatusObserver(clusterSize);
         ClusterStatusObserverActorCreator clusterStatusObserverActorCreator
                 = new ClusterStatusObserverActorCreator(clusterStatusObserver);
-        for (int i = 1; i <= clusterSize; i++) {
-            final ActorSystem actorSystem;
-            if (clusterSize == 1) {
-                actorSystem = ActorSystem.create(
-                        Utils.CLUSTER_NAME, ConfigFactory.load("single-node1"));
-            } else {
-                actorSystem = ActorSystem.create(
-                        Utils.CLUSTER_NAME, ConfigFactory.load("node" + i));
+        if (clusterSize == 1) {
+            ActorSystem actorSystem = ActorSystem.create(
+                    Utils.CLUSTER_NAME, ConfigFactory.load("single-node1"));
+            clusterObjects.put(0, new ClusterObjectRegistry(0, actorSystem, clusterStatusObserver));
+
+        } else if (clusterSize > 1) {
+            for (int i = 0; i < clusterSize; i++) {
+                final ActorSystem actorSystem = ActorSystem.create(
+                            Utils.CLUSTER_NAME, ConfigFactory.parseString(cloneConfig(i)));
+                actorSystem.actorOf(Props.create(clusterStatusObserverActorCreator), "test-cluster-satus-observer");
+                clusterObjects.put(i, new ClusterObjectRegistry(i, actorSystem, clusterStatusObserver));
             }
-            actorSystem.actorOf(Props.create(clusterStatusObserverActorCreator), "test-cluster-satus-observer");
-            clusterObjects.put(i, new ClusterObjectRegistry(i, actorSystem, clusterStatusObserver));
         }
 
         clusterStatusObserver.waitForAllMembersWithLeader(timeoutWaitForLeader, timeUnit);
@@ -86,6 +111,32 @@ public class AkkaTestCluster {
 
     public ClusterObjectRegistry getClusterObjectRegistry(int ordinal) {
         return clusterObjects.get(ordinal);
+    }
+
+    private String cloneConfig(int clusterOrdinal) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        InputStream resourceAsStream = AkkaTestCluster.class.getClassLoader().getResourceAsStream("nodex.conf.template");
+        BufferedReader in = new BufferedReader(new InputStreamReader(resourceAsStream));
+        String line = null;
+        while((line = in.readLine()) != null) {
+            if (line.contains("__host_name__")) {
+                line = line.replace("__host_name__", nodes.get(clusterOrdinal).getHostName());
+            }
+            if (line.contains("__port__")) {
+                line = line.replace("__port__", Integer.toString(nodes.get(clusterOrdinal).getPort()));
+            }
+            if (line.contains("__seed_node_list__")) {
+                line = line.replace("__seed_node_list__", seedNodeListString);
+            }
+            sb.append(line);
+            sb.append("\n");
+        }
+        String config = sb.toString();
+        return config;
+    }
+
+    private String generateNodeAddress(String clusterName, String hostName, int port) {
+        return "\"akka.tcp://" + clusterName + "@" + hostName + ":" + port + "\"";
     }
 
 }

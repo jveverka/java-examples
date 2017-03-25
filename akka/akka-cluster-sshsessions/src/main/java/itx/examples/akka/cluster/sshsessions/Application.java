@@ -24,6 +24,7 @@ public class Application {
 
     private ActorSystem actorSystem;
     private ActorRef sshClusterManagerActor;
+    private ActorRef sshLocalManagerActor;
     private SshClientService sshClientService;
 
     public Application(ActorSystem actorSystem) {
@@ -35,9 +36,11 @@ public class Application {
 
         SshClusterManager sshClusterManager = new SshClusterManager();
         SshClusterManagerActorCreator sshClusterManagerActorCreator = new SshClusterManagerActorCreator(sshClusterManager);
-        sshClusterManagerActor = actorSystem.actorOf(Props.create(sshClusterManagerActorCreator), Utils.CLUSTER_MANAGER_NAME);
+        sshClusterManagerActor = actorSystem.actorOf(
+                Props.create(sshClusterManagerActorCreator), Utils.CLUSTER_MANAGER_NAME);
 
-        actorSystem.actorOf(Props.create(SshLocalManagerActor.class), Utils.LOCAL_MANAGER_NAME);
+        sshLocalManagerActor = actorSystem.actorOf(
+                Props.create(SshLocalManagerActor.class), Utils.LOCAL_MANAGER_NAME);
 
         sshClientService = new SshClientServiceImpl(actorSystem, sshClusterManager);
 
@@ -46,7 +49,8 @@ public class Application {
 
     public void destroy() {
         LOG.info("Application shutdown.");
-        sshClusterManagerActor.tell(PoisonPill.getInstance(), null);
+        sshClusterManagerActor.tell(PoisonPill.getInstance(), ActorRef.noSender());
+        sshLocalManagerActor.tell(PoisonPill.getInstance(), ActorRef.noSender());
     }
 
     public SshClientService getSshClientService() {
