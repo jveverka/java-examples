@@ -2,8 +2,10 @@ package itx.examples.akka.cluster.sshsessions.tests;
 
 import com.google.common.util.concurrent.ListenableFuture;
 import itx.examples.akka.cluster.sshsessions.Application;
+import itx.examples.akka.cluster.sshsessions.client.HostData;
 import itx.examples.akka.cluster.sshsessions.client.SshClientService;
 import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
+import itx.examples.akka.cluster.sshsessions.client.UserCredentials;
 import itx.examples.akka.cluster.sshsessions.tests.mock.SshSessionFactoryImpl;
 import itx.examples.akka.cluster.sshsessions.sessions.SshSessionFactory;
 import itx.examples.akka.cluster.sshsessions.tests.utils.AkkaTestCluster;
@@ -27,8 +29,11 @@ import java.util.concurrent.TimeoutException;
 public class ClusterTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClusterTest.class);
-    private AkkaTestCluster akkaTestCluster;
     private static final int CLUSTER_SIZE = 3;
+
+    private AkkaTestCluster akkaTestCluster;
+    private HostData hostData = new HostData("127.0.0.1", 2222);
+    private UserCredentials userCredentials = new UserCredentials("admin", "admin");
 
     @BeforeClass
     private void init() throws IOException {
@@ -46,10 +51,12 @@ public class ClusterTest {
     @Test
     public void testCreateSshSession() throws InterruptedException {
         LOG.info("testCreateSshSession");
-        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(0).getSingleObject(Application.class).getSshClientService();
+        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(0)
+                .getSingleObject(Application.class).getSshClientService();
         SshClientSessionListenerTestImpl sshClientSessionListenerTest = new SshClientSessionListenerTestImpl();
         try {
-            ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
+            ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(hostData, userCredentials,
+                    sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
             long duration = System.nanoTime();
             SshClientSession sshClientSession = upcommingSession.get(20, TimeUnit.SECONDS);
             duration = System.nanoTime() - duration;
@@ -78,12 +85,14 @@ public class ClusterTest {
     @Test
     public void testCreateManySessions() {
         LOG.info("testCreateSshSession");
-        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(0).getSingleObject(Application.class).getSshClientService();
+        SshClientService sshClientService1 = akkaTestCluster.getClusterObjectRegistry(0)
+                .getSingleObject(Application.class).getSshClientService();
         SshClientSessionListenerTestImpl sshClientSessionListenerTest = new SshClientSessionListenerTestImpl();
         List<SshClientSession> sessions = new ArrayList<>();
         for (int i=0; i<10; i++) {
             try {
-                ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
+                ListenableFuture<SshClientSession> upcommingSession = sshClientService1.createSession(hostData, userCredentials,
+                        sshClientSessionListenerTest, 5, TimeUnit.SECONDS);
                 SshClientSession sshClientSession = upcommingSession.get(20, TimeUnit.SECONDS);
                 Assert.assertNotNull(sshClientSession);
                 sshClientSessionListenerTest.setDataWait();

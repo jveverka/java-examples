@@ -39,7 +39,9 @@ public class SshClientServiceImpl implements SshClientService {
     }
 
     @Override
-    public ListenableFuture<SshClientSession> createSession(SshClientSessionListener sshClientSessionListener,
+    public ListenableFuture<SshClientSession> createSession(HostData hostData,
+                                                            UserCredentials userCredentials,
+                                                            SshClientSessionListener sshClientSessionListener,
                                                             long timeout, TimeUnit timeUnit) {
         //1. create session create objects
         String clientId = UUID.randomUUID().toString();
@@ -59,7 +61,8 @@ public class SshClientServiceImpl implements SshClientService {
         String cmLeaderAddress = sshClusterManager.getSshClusterManagerLeaderAddress();
         LOG.info("ssh leader address: " + cmLeaderAddress);
         String clientActorAddress = Utils.getSshClientAddress(sshClusterManager.getSelfNodeAddress(), clientId);
-        SessionCreateRequest sessionCreateRequest = new SessionCreateRequest(clientId, clientActorAddress);
+        SessionCreateRequest sessionCreateRequest = new SessionCreateRequest(clientId, clientActorAddress,
+                hostData, userCredentials);
         actorSystem.actorSelection(cmLeaderAddress).tell(sessionCreateRequest, sshClientActor);
 
         return upcommingSession;
