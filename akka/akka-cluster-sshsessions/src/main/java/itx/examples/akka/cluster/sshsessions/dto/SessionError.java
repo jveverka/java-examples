@@ -7,9 +7,11 @@ import java.io.Serializable;
  */
 public class SessionError implements Serializable {
 
+    private String clientId;
     private String error;
 
-    public SessionError(String error) {
+    public SessionError(String clientId, String error) {
+        this.clientId = clientId;
         this.error = error;
     }
 
@@ -17,4 +19,7 @@ public class SessionError implements Serializable {
         return error;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
 }

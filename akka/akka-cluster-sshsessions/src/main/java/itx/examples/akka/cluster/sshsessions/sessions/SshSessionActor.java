@@ -5,7 +5,6 @@ import akka.actor.UntypedActor;
 import akka.cluster.Cluster;
 import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
 import itx.examples.akka.cluster.sshsessions.dto.*;
-import itx.examples.akka.cluster.sshsessions.mock.SshSessionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +16,14 @@ public class SshSessionActor extends UntypedActor {
     private static final Logger LOG = LoggerFactory.getLogger(SshSessionActor.class);
 
     private SshClientSession sshSession;
+    private String clientId;
     private String clientActorAddress;
     private SshClientSessionListenerImpl sshClientSessionListener;
 
-    public SshSessionActor(SshClientSession sshSession,
+    public SshSessionActor(SshClientSession sshSession, String clientId,
                            String clientActorAddress, SshClientSessionListenerImpl sshClientSessionListener) {
         this.sshSession = sshSession;
+        this.clientId = clientId;
         this.clientActorAddress = clientActorAddress;
         this.sshClientSessionListener = sshClientSessionListener;
     }
@@ -51,7 +52,7 @@ public class SshSessionActor extends UntypedActor {
             self().tell(PoisonPill.getInstance(), self());
         } else {
             LOG.info("onReceive: " + message.getClass().getName());
-            context().sender().tell(new SessionError("unsupported message"), self());
+            context().sender().tell(new SessionError(clientId,"unsupported message"), self());
         }
     }
 

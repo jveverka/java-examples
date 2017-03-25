@@ -1,16 +1,10 @@
 package itx.examples.akka.cluster.sshsessions.sessions;
 
-import akka.actor.ActorRef;
-import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.cluster.Cluster;
-import itx.examples.akka.cluster.sshsessions.Utils;
 import itx.examples.akka.cluster.sshsessions.dto.*;
-import itx.examples.akka.cluster.sshsessions.mock.SshSessionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.UUID;
 
 /**
  * Created by juraj on 3/19/17.

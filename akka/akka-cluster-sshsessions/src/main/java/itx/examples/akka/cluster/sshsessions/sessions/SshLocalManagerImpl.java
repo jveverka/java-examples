@@ -40,28 +40,35 @@ public class SshLocalManagerImpl implements SshLocalManager {
     public void onSessionCreateResquest(ActorContext actorContext, ActorRef sender, ActorRef self, SessionCreateRequest sessionCreateRequest) {
         LOG.info("create session from: " + sessionCreateRequest.getClientActorAddress());
 
-        String sessionId = UUID.randomUUID().toString();
+        try {
+            String sessionId = UUID.randomUUID().toString();
 
-        //1. create session objects and actor
-        SshClientSessionListenerImpl sshClientSessionListener = new SshClientSessionListenerImpl();
-        SshClientSession sshSession = sshSessionFactory.createSshSession(sessionId, sshClientSessionListener);
-        ActorRef sshSessionActorRef = actorContext.system().actorOf(Props.create(
-                SshSessionActor.class,
-                sshSession, sessionCreateRequest.getClientActorAddress(), sshClientSessionListener),
-                Utils.generateSessionActorName(sessionId));
+            //1. create session objects and actor
+            SshClientSessionListenerImpl sshClientSessionListener = new SshClientSessionListenerImpl();
+            SshClientSession sshSession = sshSessionFactory.createSshSession(sessionCreateRequest.getHostData(),
+                    sessionCreateRequest.getUserCredentials(),
+                    sessionId, sshClientSessionListener);
+            ActorRef sshSessionActorRef = actorContext.system().actorOf(Props.create(
+                    SshSessionActor.class, sshSession, sessionCreateRequest.getClientId(),
+                    sessionCreateRequest.getClientActorAddress(), sshClientSessionListener),
+                    Utils.generateSessionActorName(sessionId));
 
-        //2. notify creator about ssh session creation result
-        String sessionActorAddress = Utils.getSshSessionAddress(nodeAddress, sshSession.getId());
-        SessionCreateResponse sessionCreateResponse =
-                new SessionCreateResponse(sshSession.getId(),
-                        sessionCreateRequest.getClientId(), sessionActorAddress,
-                        Utils.getSshLocalManagerActorAddress(nodeAddress));
-        sender.tell(sessionCreateResponse, self);
+            //2. notify creator about ssh session creation result
+            String sessionActorAddress = Utils.getSshSessionAddress(nodeAddress, sshSession.getId());
+            SessionCreateResponse sessionCreateResponse =
+                    new SessionCreateResponse(sshSession.getId(),
+                            sessionCreateRequest.getClientId(), sessionActorAddress,
+                            Utils.getSshLocalManagerActorAddress(nodeAddress));
+            sender.tell(sessionCreateResponse, self);
 
-        ActiveSessionData activeSessionInfo = new ActiveSessionData(
-                sessionCreateRequest.getClientId(), sshSessionActorRef,
-                sshSession.getId(), sessionCreateRequest.getClientActorAddress(), sshSession);
-        activeSessions.put(sshSession.getId(), activeSessionInfo);
+            ActiveSessionData activeSessionInfo = new ActiveSessionData(
+                    sessionCreateRequest.getClientId(), sshSessionActorRef,
+                    sshSession.getId(), sessionCreateRequest.getClientActorAddress(), sshSession);
+            activeSessions.put(sshSession.getId(), activeSessionInfo);
+        } catch (SshClientException e) {
+            SessionCreateError sessionError = new SessionCreateError(sessionCreateRequest.getClientId());
+            sender.tell(sessionError, self);
+        }
     }
 
     public void onSessionCloseRequest(ActorRef self, ActorRef sender, SessionCloseRequest sessionCloseRequest) {

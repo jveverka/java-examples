@@ -26,9 +26,9 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by juraj on 3/18/17.
  */
-public class ClusterTest {
+public class ClusterBaseTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ClusterTest.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ClusterBaseTest.class);
     private static final int CLUSTER_SIZE = 3;
 
     private AkkaTestCluster akkaTestCluster;

@@ -1,0 +1,45 @@
+package itx.examples.akka.cluster.sshsessions.sessions.ssh;
+
+import itx.examples.akka.cluster.sshsessions.client.HostData;
+import itx.examples.akka.cluster.sshsessions.client.SshClientSession;
+import itx.examples.akka.cluster.sshsessions.client.SshClientSessionListener;
+import itx.examples.akka.cluster.sshsessions.client.UserCredentials;
+
+/**
+ * Created by gergej on 25.3.2017.
+ */
+public class SshClientSessionImpl implements SshClientSession {
+
+    private HostData hostData;
+    private UserCredentials userCredentials;
+    private String sessionId;
+    private SshClientSessionListener sshClientSessionListener;
+
+    public SshClientSessionImpl(HostData hostData, UserCredentials userCredentials,
+                                String sessionId, SshClientSessionListener sshClientSessionListener) {
+        this.hostData = hostData;
+        this.userCredentials = userCredentials;
+        this.sessionId = sessionId;
+        this.sshClientSessionListener = sshClientSessionListener;
+    }
+
+    public void connect() {
+
+    }
+
+    @Override
+    public String getId() {
+        return sessionId;
+    }
+
+    @Override
+    public void sendData(String data) {
+
+    }
+
+    @Override
+    public void close() throws Exception {
+
+    }
+
+}

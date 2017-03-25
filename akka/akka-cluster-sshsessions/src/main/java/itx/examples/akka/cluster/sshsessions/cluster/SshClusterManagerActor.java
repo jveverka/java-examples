@@ -62,7 +62,9 @@ public class SshClusterManagerActor extends UntypedActor {
         } else if (message instanceof GetActiveSessionsResponse) {
             GetActiveSessionsResponse getActiveSessionsResponse = (GetActiveSessionsResponse)message;
             sshClusterManager.onActiveSessionsResponse(getActiveSessionsResponse);
-
+        } else if (message instanceof SessionCreateError) {
+            SessionCreateError sessionCreateError = (SessionCreateError)message;
+            sshClusterManager.onSessionCreateError(sessionCreateError);
         } else {
             LOG.info("onReceive: " + message.getClass().getName());
         }

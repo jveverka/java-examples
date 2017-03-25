@@ -150,6 +150,13 @@ public class SshClusterManagerImpl implements SshClusterManager {
         }
     }
 
+    public void onSessionCreateError(SessionCreateError sessionCreateError) {
+        if (isLeader.get()) {
+            //TODO: handle ssh session create error
+
+        }
+    }
+
     public String getSshClusterManagerLeaderAddress() {
         return Utils.getSshClusterManagerAddress(leaderNodeAddress);
     }
