@@ -7,6 +7,8 @@ import itx.examples.akka.cluster.sshsessions.client.UserCredentials;
 import itx.examples.akka.cluster.sshsessions.sessions.SshClientException;
 import itx.examples.akka.cluster.sshsessions.sessions.SshSessionFactory;
 
+import java.io.IOException;
+
 /**
  * Created by gergej on 25.3.2017.
  */
@@ -16,10 +18,14 @@ public class SshSessionFactoryImpl implements SshSessionFactory {
     public SshClientSession createSshSession(HostData hostData, UserCredentials userCredentials,
                                              String sessionId, SshClientSessionListener sshClientSessionListener)
             throws SshClientException {
-        SshClientSessionImpl sshClientSession
-                = new SshClientSessionImpl(hostData, userCredentials, sessionId, sshClientSessionListener);
-        sshClientSession.connect();
-        return sshClientSession;
+        try {
+            SshClientSessionImpl sshClientSession
+                    = new SshClientSessionImpl(hostData, userCredentials, sessionId, sshClientSessionListener);
+            sshClientSession.connect();
+            return sshClientSession;
+        } catch (IOException e) {
+            throw new SshClientException(e);
+        }
     }
 
 }
