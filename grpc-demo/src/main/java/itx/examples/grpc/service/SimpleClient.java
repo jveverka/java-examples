@@ -3,6 +3,7 @@ package itx.examples.grpc.service;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,6 +48,11 @@ public class SimpleClient {
             LOG.warn("RPC failed: {}", e.getStatus());
             return null;
         }
+    }
+
+    public StreamObserver<DataMessage> getMessageChannel(StreamObserver<DataMessage> responseObserver) {
+        GreeterGrpc.GreeterStub greeterStub = GreeterGrpc.newStub(channel);
+        return greeterStub.messageChannel(responseObserver);
     }
 
     /**

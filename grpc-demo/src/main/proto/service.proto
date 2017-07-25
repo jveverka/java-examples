@@ -10,6 +10,7 @@ service Greeter {
     rpc SayHello (HelloRequest) returns (HelloReply) {}
 
     rpc MessageChannel (stream DataMessage) returns (stream DataMessage) {}
+
 }
 
 message HelloRequest {

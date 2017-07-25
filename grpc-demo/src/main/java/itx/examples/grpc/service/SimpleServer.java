@@ -70,6 +70,12 @@ public class SimpleServer {
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
+
+        @Override
+        public StreamObserver<DataMessage> messageChannel(StreamObserver<DataMessage> responseObserver) {
+            return new ServerMessageChannelStreamObserver<DataMessage>(responseObserver);
+        }
+
     }
 
 }
