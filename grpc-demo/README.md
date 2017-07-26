@@ -17,12 +17,17 @@ Run Server
 
 Run Client
 ----------
-```./build/install/grpc-demo/bin/grpc-demo --host <serverHostName> --port 50051 --scenario <scenarioName>```
+```./build/install/grpc-demo/bin/grpc-demo --host <serverHostName> --port 50051 <scenarioName> <scenarioParameters>```
 
 Supported client scenarios
 --------------------------
 
 #### sayHello 
-client sends one hello message to server and finish.  
-```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 --scenario sayHello```
+client sends single hello message to server synchronously and ends.  
+```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 sayHello -m hi```
 
+#### repeatHello
+client sends several warmup messages and than number of hello messages to server synchronously and ends.
+example shows repeatHello with 500 warm-up messages and 1k hello messages. Time and performance is printed 
+on stdout when done.  
+```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 repeatHello -w 500 -c 1000 -m hi```
