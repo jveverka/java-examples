@@ -26,8 +26,28 @@ Supported client scenarios
 client sends single hello message to server synchronously and ends.  
 ```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 sayHello -m hi```
 
-#### repeatHello
-client sends several warmup messages and than number of hello messages to server synchronously and ends.
-example shows repeatHello with 500 warm-up messages and 1k hello messages. Time and performance is printed 
+#### getDataSync
+client sends synchronously several warm-up messages and than number of data messages to server synchronously and ends.
+example shows getDataSync with 500 warm-up messages and 1k data messages. Test is repeated 5 times, each time time and performance is printed 
 on stdout when done.  
-```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 repeatHello -w 500 -c 1000 -m hi```
+```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 getDataSync -w 500 -c 1000 -m hi -r 5```
+
+#### getDataAsync
+client sends asynchronously several warm-up messages and than number of data messages to server asynchronously and ends.
+example shows getDataSync with 500 warm-up messages and 1k data messages. Test is repeated 5 times, each time time and performance is printed 
+on stdout when done.  
+```./build/install/grpc-demo/bin/grpc-demo --host localhost --port 50051 getDataAsync -w 500 -c 1000 -m hi -r 5```
+
+Performance measurements
+------------------------
+Here are some performance measurements of for synchronous and asynchronous message sending.
+
+| Scenario    | Parameters            | Server       | Client        | Network   | Result [msg/s] |
+|-------------|-----------------------|--------------|---------------|:---------:|---------------:|
+| getDataAsync|-c 100000 -r 20 -m data|i7-3632QM CPU | i7-3632QM CPU | localhost | 22 000         |
+| getDataSync |-c 100000 -r 20 -m data|i7-3632QM CPU | i7-3632QM CPU | localhost |  6 400         |
+| getDataAsync|-c 100000 -r 20 -m data|i7-3632QM CPU | Odroid C1 SBC | 1 Gig/s   | 10 000         |
+| getDataSync |-c 100000 -r 20 -m data|i7-3632QM CPU | Odroid C1 SBC | 1 Gig/s   |    860         |
+| getDataAsync|-c 100000 -r 20 -m data|i7-3632QM CPU | i7-4810MQ CPU | 1 Gig/s   | 43 000         |
+| getDataSync |-c 100000 -r 20 -m data|i7-3632QM CPU | i7-4810MQ CPU | 1 Gig/s   |  1 600         |
+

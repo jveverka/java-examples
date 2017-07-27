@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CountDownLatch;
 
-public class TestMessageChannelStreamObserver<V extends DataMessage> implements StreamObserver<V> {
+public class TestDataChannelStreamObserver<V extends DataMessage> implements StreamObserver<V> {
 
-    final private static Logger LOG = LoggerFactory.getLogger(TestMessageChannelStreamObserver.class);
+    final private static Logger LOG = LoggerFactory.getLogger(TestDataChannelStreamObserver.class);
 
     private DataMessage lastMessage;
     private CountDownLatch countDownLatch = new CountDownLatch(1);

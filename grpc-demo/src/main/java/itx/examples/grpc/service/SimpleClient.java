@@ -25,8 +25,7 @@ public class SimpleClient {
                 .build());
     }
 
-    /** Construct client for accessing RouteGuide server using the existing channel. */
-    SimpleClient(ManagedChannel channel) {
+    private SimpleClient(ManagedChannel channel) {
         this.channel = channel;
         blockingStub = GreeterGrpc.newBlockingStub(channel);
     }
@@ -35,7 +34,6 @@ public class SimpleClient {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
-    /** Say hello to server. */
     public HelloReply greet(String name) {
         LOG.debug("Will try to greet " + name + " ...");
         HelloRequest request = HelloRequest.newBuilder().setName(name).build();
@@ -50,28 +48,13 @@ public class SimpleClient {
         }
     }
 
-    public StreamObserver<DataMessage> getMessageChannel(StreamObserver<DataMessage> responseObserver) {
-        GreeterGrpc.GreeterStub greeterStub = GreeterGrpc.newStub(channel);
-        return greeterStub.messageChannel(responseObserver);
+    public DataMessage getData(DataMessage dataMessage) {
+        return blockingStub.getData(dataMessage);
     }
 
-    /**
-     * Greet server. If provided, the first element of {@code args} is the name to use in the
-     * greeting.
-     */
-    public static void main(String[] args) throws Exception {
-        SimpleClient client = new SimpleClient("localhost", 50051);
-        try {
-      /* Access a service running on the local machine on port 50051 */
-            String user = "world";
-            if (args.length > 0) {
-                user = args[0]; /* Use the arg as the name to greet if provided */
-            }
-            HelloReply helloReply = client.greet(user);
-            LOG.info("reply from server: {}", helloReply.getMessage());
-        } finally {
-            client.shutdown();
-        }
+    public StreamObserver<DataMessage> getDataChannel(StreamObserver<DataMessage> responseObserver) {
+        GreeterGrpc.GreeterStub greeterStub = GreeterGrpc.newStub(channel);
+        return greeterStub.dataChannel(responseObserver);
     }
 
 }

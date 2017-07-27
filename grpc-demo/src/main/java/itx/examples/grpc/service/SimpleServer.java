@@ -43,22 +43,10 @@ public class SimpleServer {
         }
     }
 
-    /**
-     * Await termination on the main thread since the grpc library uses daemon threads.
-     */
     public void blockUntilShutdown() throws InterruptedException {
         if (server != null) {
             server.awaitTermination();
         }
-    }
-
-    /**
-     * Main launches the server from the command line.
-     */
-    public static void main(String[] args) throws IOException, InterruptedException {
-        final SimpleServer server = new SimpleServer(50051);
-        server.start();
-        server.blockUntilShutdown();
     }
 
     static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
@@ -72,8 +60,16 @@ public class SimpleServer {
         }
 
         @Override
-        public StreamObserver<DataMessage> messageChannel(StreamObserver<DataMessage> responseObserver) {
-            return new ServerMessageChannelStreamObserver<DataMessage>(responseObserver);
+        public void getData(DataMessage req, StreamObserver<DataMessage> responseObserver) {
+            DataMessage reply = DataMessage.newBuilder().mergeFrom(req).build();
+            LOG.debug("reply: {} {}", reply.getIndex(), reply.getMessage());
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+        }
+
+        @Override
+        public StreamObserver<DataMessage> dataChannel(StreamObserver<DataMessage> responseObserver) {
+            return new ServerDataChannelStreamObserver<DataMessage>(responseObserver);
         }
 
     }

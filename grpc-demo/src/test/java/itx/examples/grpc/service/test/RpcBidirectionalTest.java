@@ -4,10 +4,10 @@ import io.grpc.stub.StreamObserver;
 import itx.examples.grpc.service.DataMessage;
 import itx.examples.grpc.service.SimpleClient;
 import itx.examples.grpc.service.SimpleServer;
-import org.junit.Assert;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
@@ -23,10 +23,10 @@ public class RpcBidirectionalTest {
         server.start();
         SimpleClient client = new SimpleClient(SERVER_HOST, SERVER_PORT);
 
-        TestMessageChannelStreamObserver testMessageChannelStreamObserver = new TestMessageChannelStreamObserver<DataMessage>();
-        StreamObserver<DataMessage> messageChannel = client.getMessageChannel(testMessageChannelStreamObserver);
+        TestDataChannelStreamObserver testMessageChannelStreamObserver = new TestDataChannelStreamObserver<DataMessage>();
+        StreamObserver<DataMessage> messageChannel = client.getDataChannel(testMessageChannelStreamObserver);
 
-        DataMessage dataMessage = DataMessage.newBuilder().setMessage("from client").build();
+        DataMessage dataMessage = DataMessage.newBuilder().setMessage("CLOSE").build();
         messageChannel.onNext(dataMessage);
         messageChannel.onCompleted();
 
@@ -34,7 +34,7 @@ public class RpcBidirectionalTest {
 
         DataMessage lastMessage = testMessageChannelStreamObserver.getLastMessage();
         Assert.assertNotNull(lastMessage);
-        Assert.assertEquals("from server", lastMessage.getMessage());
+        Assert.assertEquals("CLOSE", lastMessage.getMessage());
 
         server.stop();
         server.blockUntilShutdown();

@@ -9,7 +9,9 @@ service Greeter {
 
     rpc SayHello (HelloRequest) returns (HelloReply) {}
 
-    rpc MessageChannel (stream DataMessage) returns (stream DataMessage) {}
+    rpc GetData (DataMessage) returns (DataMessage) {}
+
+    rpc DataChannel (stream DataMessage) returns (stream DataMessage) {}
 
 }
 
@@ -22,5 +24,6 @@ message HelloReply {
 }
 
 message DataMessage {
-    string message = 1;
+    uint64 index = 1;
+    string message = 2;
 }

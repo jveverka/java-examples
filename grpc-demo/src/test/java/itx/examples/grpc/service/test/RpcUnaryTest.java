@@ -3,10 +3,10 @@ package itx.examples.grpc.service.test;
 import itx.examples.grpc.service.HelloReply;
 import itx.examples.grpc.service.SimpleClient;
 import itx.examples.grpc.service.SimpleServer;
-import org.junit.Assert;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 
