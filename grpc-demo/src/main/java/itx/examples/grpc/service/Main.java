@@ -9,8 +9,6 @@ import itx.examples.grpc.service.commands.SayHelloScenario;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Main {
@@ -155,8 +153,8 @@ public class Main {
             DataMessage dataMessage = DataMessage.newBuilder().setIndex(i).setMessage(message).build();
             outgoingStreamObserver.onNext(dataMessage);
         }
-        outgoingStreamObserver.onNext(closeChannelMessage);
 
+        outgoingStreamObserver.onNext(closeChannelMessage);
         incomingStreamObserver.awaitCompletion(5, TimeUnit.MINUTES);
 
         for (int i = 0; i < messageCount; i++) {
