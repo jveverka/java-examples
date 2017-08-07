@@ -2,11 +2,13 @@ package itx.examples.grpc.service;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.netty.NettyServerBuilder;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 public class SimpleServer {
 
@@ -14,18 +16,22 @@ public class SimpleServer {
 
     private Server server;
     private int port = 50051;
+    private String host = "127.0.0.1";
 
-    public SimpleServer(int port) {
+    public SimpleServer(String host, int port) {
+        if (host != null) {
+            this.host = host;
+        }
         this.port = port;
     }
 
     public void start() throws IOException {
-    /* The port on which the server should run */
-        server = ServerBuilder.forPort(port)
+        server = NettyServerBuilder.forAddress(new InetSocketAddress(host, port))
+        //server = ServerBuilder.forPort(port)
                 .addService(new GreeterImpl())
                 .build()
                 .start();
-        LOG.info("Server started, listening on " + port);
+        LOG.info("Server started, listening on {}:{}", host, port);
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {

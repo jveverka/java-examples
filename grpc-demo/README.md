@@ -12,7 +12,7 @@ Build and Install
 
 Run Server
 ----------
-```./build/install/grpc-demo/bin/grpc-demo --port 50051```
+```./build/install/grpc-demo/bin/grpc-demo --host <interfaceIp> --port 50051```
 
 
 Run Client
@@ -59,4 +59,6 @@ DataMessage exchanged between client and server in those tests looks like this: 
 | getDataSync |-c 100000 -r 20 -m data|i7-3632QM CPU | RaspberryPi B+ | 100 Mb/s  |    200         |
 | getDataAsync|-c 100000 -r 20 -m data|i7-3632QM CPU | RaspberryPi 0  | 100 Mb/s  |  2 000         |
 | getDataSync |-c 100000 -r 20 -m data|i7-3632QM CPU | RaspberryPi 0  | 100 Mb/s  |    260         |
+| getDataAsync|-c 100000 -r 20 -m data|i7-3632QM CPU | RaspberryPiW0  | wifi      |  1 900         |
+| getDataSync |-c 100000 -r 20 -m data|i7-3632QM CPU | RaspberryPiW0  | wifi      |    150         |
 

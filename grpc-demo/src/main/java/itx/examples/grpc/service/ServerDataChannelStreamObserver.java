@@ -26,6 +26,7 @@ public class ServerDataChannelStreamObserver<V extends DataMessage> implements S
     public void onNext(V value) {
         if (CLOSE_COMMAND.equals(value.getMessage())) {
             try {
+                responseObserver.onNext(DataMessage.newBuilder().mergeFrom(value).build());
                 executorService.shutdown();
                 executorService.awaitTermination(20, TimeUnit.SECONDS);
                 responseObserver.onCompleted();

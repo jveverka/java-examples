@@ -3,7 +3,7 @@ package itx.examples.grpc.service.commands;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
-@Parameters(commandDescription = "getDataAsync scenario")
+@Parameters(commandDescription = "getDataAsync scenario, runs in client mode if specified")
 public class GetDataAsyncScenario {
 
     @Parameter(names = "-w", description = "number of warm-up data messages")
