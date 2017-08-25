@@ -4,7 +4,7 @@ public final class Setup {
 
     public static final String SERVER_HOST = "localhost";
 
-    public static final String CLIENT_INBOUND_QUEUE = "client-in";
-    public static final String CLIENT_OUTBOUND_QUEUE = "client-out";
+    public static final String CLIENT_RESPONSE_QUEUE = "client-response";
+    public static final String CLIENT_REQUEST_QUEUE = "client-request";
 
 }

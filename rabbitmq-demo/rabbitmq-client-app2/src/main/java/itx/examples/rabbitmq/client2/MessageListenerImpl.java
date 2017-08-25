@@ -1,5 +1,6 @@
 package itx.examples.rabbitmq.client2;
 
+import itx.examples.rabbitmq.common.MessageData;
 import itx.examples.rabbitmq.common.dispatcher.MessageDispatcher;
 import itx.examples.rabbitmq.common.receiver.MessageListener;
 import org.slf4j.Logger;
@@ -18,9 +19,9 @@ public class MessageListenerImpl implements MessageListener {
     }
 
     @Override
-    public void onMessage(String message) {
+    public void onMessage(MessageData message) {
         try {
-            messageDispatcher.sendMessage("response-" + message);
+            messageDispatcher.sendMessage(new MessageData(message));
         } catch (IOException e) {
             LOG.error("Send message failed: ", e);
         }

@@ -1,6 +1,8 @@
 package itx.examples.rabbitmq.common.receiver;
 
 import com.rabbitmq.client.*;
+import itx.examples.rabbitmq.common.MessageData;
+import itx.examples.rabbitmq.common.MessageUtils;
 import itx.examples.rabbitmq.common.Setup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +38,9 @@ public class MessageReceiverImpl implements MessageReceiver {
             public void handleDelivery(String consumerTag, Envelope envelope,
                                        AMQP.BasicProperties properties, byte[] body)
                     throws IOException {
-                String message = new String(body, "UTF-8");
-                LOG.info(" [x] Received '{}'", message);
-                messageListener.onMessage(message);
+                MessageData messageData = MessageUtils.fromByteArray(body);
+                LOG.trace(" [x] Received '{}'", messageData);
+                messageListener.onMessage(messageData);
             }
         };
         channel.basicConsume(queueName, true, consumer);

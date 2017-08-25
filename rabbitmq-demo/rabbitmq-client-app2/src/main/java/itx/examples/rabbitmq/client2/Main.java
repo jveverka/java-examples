@@ -1,6 +1,5 @@
 package itx.examples.rabbitmq.client2;
 
-import com.rabbitmq.client.*;
 import itx.examples.rabbitmq.common.Setup;
 import itx.examples.rabbitmq.common.dispatcher.MessageDispatcher;
 import itx.examples.rabbitmq.common.dispatcher.MessageDispatcherImpl;
@@ -19,11 +18,11 @@ public class Main {
 
     public static void main(String[] args) throws IOException, TimeoutException {
         LOG.info("rabbitMQ client 02 starter");
-        MessageDispatcher messageDispatcher = new MessageDispatcherImpl(Setup.CLIENT_INBOUND_QUEUE);
+        MessageDispatcher messageDispatcher = new MessageDispatcherImpl(Setup.CLIENT_RESPONSE_QUEUE);
         messageDispatcher.start();
 
         MessageListener messageListener = new MessageListenerImpl(messageDispatcher);
-        MessageReceiver messageReceiver = new MessageReceiverImpl(Setup.CLIENT_OUTBOUND_QUEUE, messageListener);
+        MessageReceiver messageReceiver = new MessageReceiverImpl(Setup.CLIENT_REQUEST_QUEUE, messageListener);
         messageReceiver.startBlocking();
 
         Runtime.getRuntime().addShutdownHook(new Thread() {

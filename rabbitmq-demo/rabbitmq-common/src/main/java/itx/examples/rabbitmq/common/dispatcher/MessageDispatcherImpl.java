@@ -3,6 +3,8 @@ package itx.examples.rabbitmq.common.dispatcher;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import itx.examples.rabbitmq.common.MessageData;
+import itx.examples.rabbitmq.common.MessageUtils;
 import itx.examples.rabbitmq.common.Setup;
 
 import java.io.IOException;
@@ -28,8 +30,8 @@ public class MessageDispatcherImpl implements MessageDispatcher {
     }
 
     @Override
-    public void sendMessage(String message) throws IOException {
-        channel.basicPublish("", queueName, null, message.getBytes());
+    public void sendMessage(MessageData message) throws IOException {
+        channel.basicPublish("", queueName, null, MessageUtils.getBytes(message));
     }
 
     @Override
