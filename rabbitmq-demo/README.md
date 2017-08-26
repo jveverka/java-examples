@@ -27,5 +27,18 @@ client-app1 --> client-request-queue  --> client-app2 -\
 Build and Run
 -------------
 ```gradle clean build```  
+```gradle clean installDist distZip```  
+
 rabbitmq-client-app2: ```itx.examples.rabbitmq.client2.Main```  
 rabbitmq-client-app1: ```itx.examples.rabbitmq.client1.Main```  
+
+```./rabbitmq-client-app2/build/install/rabbitmq-client-app2/bin/rabbitmq-client-app2 -Dserver=127.0.0.1```  
+```./rabbitmq-client-app1/build/install/rabbitmq-client-app1/bin/rabbitmq-client-app1 -Dserver=127.0.0.1```  
+
+Performance measurements
+------------------------
+MessageData exchanged between clients in those tests looks like this: ```{ contextId: $i, message: "data" }```
+
+|  client-app2  | RabbimMQ server | client-app1   | network   | avg. msg/sec |
+|---------------|-----------------|---------------|-----------|--------------|  
+| i7-3632QM CPU | i7-3632QM CPU   | i7-3632QM CPU | localhost | 23214.436    |

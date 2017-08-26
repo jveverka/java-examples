@@ -17,19 +17,23 @@ public class Main {
     final private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException, TimeoutException {
-        LOG.info("rabbitMQ client 02 starter");
-        MessageDispatcher messageDispatcher = new MessageDispatcherImpl(Setup.CLIENT_RESPONSE_QUEUE);
+        final String serverHostname = Setup.resolveServerHost(args);
+        LOG.info("RabbitMQ client 02 starter {}", serverHostname);
+        MessageDispatcher messageDispatcher = new MessageDispatcherImpl(serverHostname, Setup.CLIENT_RESPONSE_QUEUE);
         messageDispatcher.start();
 
         MessageListener messageListener = new MessageListenerImpl(messageDispatcher);
-        MessageReceiver messageReceiver = new MessageReceiverImpl(Setup.CLIENT_REQUEST_QUEUE, messageListener);
+        MessageReceiver messageReceiver
+                = new MessageReceiverImpl(serverHostname, Setup.CLIENT_REQUEST_QUEUE, messageListener);
         messageReceiver.startBlocking();
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
                 try {
+                    LOG.info("Shutting down ...");
                     messageReceiver.shutdown();
                     messageDispatcher.shutdown();
+                    LOG.info("bye.");
                 } catch (TimeoutException | IOException e) {
                     LOG.error("shutdown error: ", e);
                 }

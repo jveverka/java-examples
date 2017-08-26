@@ -14,12 +14,14 @@ public class MessageReceiverImpl implements MessageReceiver {
 
     final private static Logger LOG = LoggerFactory.getLogger(MessageReceiverImpl.class);
 
+    private String serverHostName;
     private String queueName;
     private MessageListener messageListener;
     private Connection connection;
     private Channel channel;
 
-    public MessageReceiverImpl(String queueName, MessageListener messageListener) {
+    public MessageReceiverImpl(String serverHostName, String queueName, MessageListener messageListener) {
+        this.serverHostName = serverHostName;
         this.queueName = queueName;
         this.messageListener = messageListener;
     }
@@ -27,7 +29,7 @@ public class MessageReceiverImpl implements MessageReceiver {
     @Override
     public void startBlocking() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(Setup.SERVER_HOST);
+        factory.setHost(serverHostName);
         connection = factory.newConnection();
         channel = connection.createChannel();
         channel.queueDeclare(queueName, false, false, false, null);

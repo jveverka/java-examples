@@ -19,27 +19,37 @@ public class Main {
     final private static Logger LOG = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws IOException, TimeoutException, InterruptedException {
-        final String messagePayload = "message";
-        LOG.info("Rabbit MQ test started ");
+
+        final String messagePayload = "data";
+        final String serverHostname = Setup.resolveServerHost(args);
+
+        final int WARMUP_CYCLES = 10;
+        final int WARMUP_MESSAGE_COUNT = 10;
+        final int TEST_CYCLES = 100;
+        final int TEST_MESSAGE_COUNT = 10_000;
+
+        LOG.info("Rabbit MQ test started {}", serverHostname);
         List<TestResult> testResultList = new ArrayList<>();
 
-        MessageDispatcher messageDispatcher = new MessageDispatcherImpl(Setup.CLIENT_REQUEST_QUEUE);
+        MessageDispatcher messageDispatcher = new MessageDispatcherImpl(serverHostname, Setup.CLIENT_REQUEST_QUEUE);
         messageDispatcher.start();
 
         MessageListenerImpl messageListener = new MessageListenerImpl();
-        MessageReceiver messageReceiver = new MessageReceiverImpl(Setup.CLIENT_RESPONSE_QUEUE, messageListener);
+        MessageReceiver messageReceiver
+                = new MessageReceiverImpl(serverHostname, Setup.CLIENT_RESPONSE_QUEUE, messageListener);
         messageReceiver.start();
 
         LOG.info("Warm-up started ...");
-        for (int i=0; i<10; i++) {
-            sendMessages(i,10, messagePayload, messageListener, messageDispatcher);
+        for (int i=0; i<WARMUP_CYCLES; i++) {
+            sendMessages(i,WARMUP_MESSAGE_COUNT, messagePayload, messageListener, messageDispatcher);
             Thread.sleep(1_000);
         }
 
         LOG.info("Testing started ...");
         Thread.sleep(5_000);
-        for (int i=0; i<100; i++) {
-            TestResult testResult = sendMessages(i, 10_000, messagePayload, messageListener, messageDispatcher);
+        for (int i=0; i<TEST_CYCLES; i++) {
+            TestResult testResult
+                    = sendMessages(i, TEST_MESSAGE_COUNT, messagePayload, messageListener, messageDispatcher);
             testResultList.add(testResult);
             Thread.sleep(100);
         }

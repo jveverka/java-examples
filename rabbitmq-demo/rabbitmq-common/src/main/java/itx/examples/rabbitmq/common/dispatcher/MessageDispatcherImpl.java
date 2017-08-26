@@ -5,25 +5,26 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import itx.examples.rabbitmq.common.MessageData;
 import itx.examples.rabbitmq.common.MessageUtils;
-import itx.examples.rabbitmq.common.Setup;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
 public class MessageDispatcherImpl implements MessageDispatcher {
 
+    private String serverHostName;
     private String queueName;
     private Connection connection;
     private Channel channel;
 
-    public MessageDispatcherImpl(String queueName) {
+    public MessageDispatcherImpl(String serverHostName, String queueName) {
+        this.serverHostName = serverHostName;
         this.queueName = queueName;
     }
 
     @Override
     public void start() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(Setup.SERVER_HOST);
+        factory.setHost(serverHostName);
         connection = factory.newConnection();
         channel = connection.createChannel();
         channel.queueDeclare(queueName, false, false, false, null);
