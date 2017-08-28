@@ -10,6 +10,8 @@ repositories {
 
 mainClassName = 'itx.examples.dropwizard.server.MainApplication'
 
+applicationDefaultJvmArgs = ["-Xms150M", "-Xmx300M"]
+
 dependencies {
    compile 'org.slf4j:slf4j-api:1.7.25'
    compile 'io.dropwizard:dropwizard-core:1.1.4'
