@@ -1,6 +1,7 @@
 package itx.examples.dropwizard.server;
 
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import itx.examples.dropwizard.server.rest.DataServiceRest;
@@ -32,6 +33,7 @@ public class MainApplication extends Application<ApplicationConfiguration> {
     @Override
     public void initialize(Bootstrap<ApplicationConfiguration> bootstrap) {
         LOG.info("initialize");
+        bootstrap.addBundle(new AssetsBundle("/assets", "/web", "index.html"));
     }
 
     @Override
