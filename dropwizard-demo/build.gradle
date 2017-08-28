@@ -14,6 +14,8 @@ dependencies {
    compile 'org.slf4j:slf4j-api:1.7.25'
    compile 'io.dropwizard:dropwizard-core:1.1.4'
    compile 'io.dropwizard:dropwizard-assets:1.1.4'
+   compile 'org.eclipse.jetty.websocket:websocket-api:9.4.6.v20170531'
+   compile 'org.eclipse.jetty.websocket:websocket-server:9.4.6.v20170531'
 
    testCompile 'org.testng:testng:6.11'
 }

@@ -7,6 +7,9 @@ import io.dropwizard.setup.Environment;
 import itx.examples.dropwizard.server.rest.DataServiceRest;
 import itx.examples.dropwizard.server.services.DataService;
 import itx.examples.dropwizard.server.services.DataServiceImpl;
+import itx.examples.dropwizard.server.ws.WSCreator;
+import itx.examples.dropwizard.server.ws.WSocketServlet;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +45,12 @@ public class MainApplication extends Application<ApplicationConfiguration> {
         DataService dataService = new DataServiceImpl();
         DataServiceRest dataServiceRest = new DataServiceRest(dataService);
         environment.jersey().register(dataServiceRest);
+
+        WSCreator wsCreator = new WSCreator(dataService);
+        WSocketServlet wSocketServlet = new WSocketServlet(wsCreator);
+        environment.getApplicationContext().getServletHandler().addServletWithMapping(
+                new ServletHolder(wSocketServlet), "/ws/*"
+        );
         LOG.info("done.");
     }
 
