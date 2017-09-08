@@ -1,0 +1,64 @@
+
+group = 'itx.examples.modules'
+version = '1.0.0-SNAPSHOT'
+
+dependencies {
+    compile group: 'org.jboss.modules', name: 'jboss-modules', version: '1.6.0.Final'
+}
+
+task buildmodules {
+    dependsOn ':service-client:buildmodules',
+            ':service-module-01-api:buildmodules',':service-module-01-impl:buildmodules',
+            ':service-module-02-api:buildmodules',':service-module-02-impl:buildmodules', build
+
+    doLast {
+        copy {
+            from "src/main/scripts/start-application.sh"
+            into "${project.projectDir}/build/app/"
+        }
+        copy {
+            from configurations.compile.files
+            include 'jboss-modules-1.6.0.Final.jar'
+            into "${project.projectDir}/build/app/"
+        }
+        copy {
+            from configurations.compile.files
+            include 'log4j-1.2.17.jar'
+            include 'slf4j-api-1.7.25.jar'
+            include 'slf4j-log4j12-1.7.25.jar'
+            into "${project.projectDir}/build/app/modules/common"
+        }
+        copy {
+            from "src/main/modules/common/module.xml"
+            into "${project.projectDir}/build/app/modules/common"
+        }
+        copy {
+            from jar
+            from "src/main/modules/app/module.xml"
+            into "${project.projectDir}/build/app/modules/app"
+        }
+        copy {
+            from "${project.projectDir}/../service-client/build/module/service-client-1.0.0-SNAPSHOT.jar"
+            from "src/main/modules/service-client/module.xml"
+            into "${project.projectDir}/build/app/modules/service-client"
+        }
+        copy {
+            from "${project.projectDir}/../service-module-01-api/build/module/service-module-01-api-1.0.0-SNAPSHOT.jar"
+            from "${project.projectDir}/../service-module-02-api/build/module/service-module-02-api-1.0.0-SNAPSHOT.jar"
+            from "src/main/modules/api-module/module.xml"
+            into "${project.projectDir}/build/app/modules/api-module"
+        }
+        copy {
+            from "${project.projectDir}/../service-module-01-impl/build/module/service-module-01-impl-1.0.0-SNAPSHOT.jar"
+            from "${project.projectDir}/../service-module-01-impl/build/module/guava-23.0.jar"
+            from "src/main/modules/service-module-01/module.xml"
+            into "${project.projectDir}/build/app/modules/service-module-01"
+        }
+        copy {
+            from "${project.projectDir}/../service-module-02-impl/build/module/service-module-02-impl-1.0.0-SNAPSHOT.jar"
+            from "${project.projectDir}/../service-module-02-impl/build/module/guava-18.0.jar"
+            from "src/main/modules/service-module-02/module.xml"
+            into "${project.projectDir}/build/app/modules/service-module-02"
+        }
+    }
+}

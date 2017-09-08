@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.0" name="service-module-02">
+    <resources>
+        <resource-root path="service-module-02-impl-1.0.0-SNAPSHOT.jar" />
+        <resource-root path="guava-18.0.jar" />
+    </resources>
+    <dependencies>
+        <module name="api-module"/>
+    </dependencies>
+</module>

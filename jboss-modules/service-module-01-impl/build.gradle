@@ -1,0 +1,19 @@
+
+group = 'itx.examples.modules'
+version = '1.0.0-SNAPSHOT'
+
+dependencies {
+   compile group: 'com.google.guava', name: 'guava', version: '23.0'
+}
+
+task buildmodules {
+   dependsOn build
+   doLast {
+      println "building service-module-01-impl"
+      copy {
+         from configurations.compile.files
+         from jar
+         into "${project.projectDir}/build/module"
+      }
+   }
+}

@@ -1,0 +1,15 @@
+
+group = 'itx.examples.modules'
+version = '1.0.0-SNAPSHOT'
+
+task buildmodules {
+    dependsOn build
+    doLast {
+        println "building service-module-02-api"
+        copy {
+            from configurations.compile.files
+            from jar
+            into "${project.projectDir}/build/module"
+        }
+    }
+}

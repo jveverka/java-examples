@@ -1,0 +1,52 @@
+
+allprojects {
+}
+
+subprojects {
+    apply plugin: "java"
+  
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        compile 'org.slf4j:slf4j-api:1.7.25'
+        compile 'org.slf4j:slf4j-log4j12:1.7.25'
+    }
+}
+
+project(':modular-application') {
+    dependencies {
+        compile project(':service-client')
+        compile project(':service-module-01-api')
+        compile project(':service-module-01-impl')
+        compile project(':service-module-02-api')
+        compile project(':service-module-02-impl')
+    }
+}
+
+project(':service-client') {
+    dependencies {
+        compile project(':service-module-01-api')
+        compile project(':service-module-02-api')
+    }
+}
+
+project(':service-module-01-api') {
+}
+
+project(':service-module-01-impl') {
+    dependencies {
+        compile project(':service-module-01-api')
+    }
+}
+
+project(':service-module-02-api') {
+}
+
+project(':service-module-02-impl') {
+    dependencies {
+        compile project(':service-module-02-api')
+    }
+}
+

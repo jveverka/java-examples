@@ -1,0 +1,7 @@
+include "service-client"
+include "service-module-01-api" 
+include "service-module-01-impl" 
+include "service-module-02-api"
+include "service-module-02-impl"
+include "modular-application"
+
