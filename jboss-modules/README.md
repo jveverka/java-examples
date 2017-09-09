@@ -1,9 +1,9 @@
 Java modules demo
 =================
-Simple example of 'modular' java application, 
+This is simple example of 'modular' java application, 
 based on [JBoss Modules](https://github.com/jboss-modules/jboss-modules) project.
 For further details, see [this manual](https://jboss-modules.github.io/jboss-modules/manual/).
-Modular application means that the modules listed below have own class loader.
+Modular application means that the modules listed below have own class loaders.
 
 This demo simulates the situation where java application has to use java libraries that are 
 not aligned and they have same dependencies but of different versions. Artifacts used in this 
