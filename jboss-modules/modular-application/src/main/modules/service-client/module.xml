@@ -4,6 +4,8 @@
         <resource-root path="service-client-1.0.0-SNAPSHOT.jar" />
     </resources>
     <dependencies>
-        <module name="api-module"/>
+        <module name="service-registry"/>
+        <module name="service-module-01-api"/>
+        <module name="service-module-02-api"/>
     </dependencies>
 </module>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module xmlns="urn:jboss:module:1.0" name="api-module">
+<module xmlns="urn:jboss:module:1.0" name="service-module-01-api">
     <resources>
         <resource-root path="service-module-01-api-1.0.0-SNAPSHOT.jar" />
-        <resource-root path="service-module-02-api-1.0.0-SNAPSHOT.jar" />
     </resources>
+    <dependencies>
+        <module name="service-module-01"/>
+    </dependencies>
 </module>

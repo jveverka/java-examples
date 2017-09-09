@@ -7,7 +7,7 @@ dependencies {
 }
 
 task buildmodules {
-    dependsOn ':service-client:buildmodules',
+    dependsOn ':service-client:buildmodules', ':service-registry:buildmodules',
             ':service-module-01-api:buildmodules',':service-module-01-impl:buildmodules',
             ':service-module-02-api:buildmodules',':service-module-02-impl:buildmodules', build
 
@@ -38,15 +38,24 @@ task buildmodules {
             into "${project.projectDir}/build/app/modules/app"
         }
         copy {
+            from "${project.projectDir}/../service-registry/build/module/service-registry-1.0.0-SNAPSHOT.jar"
+            from "src/main/modules/service-registry/module.xml"
+            into "${project.projectDir}/build/app/modules/service-registry"
+        }
+        copy {
             from "${project.projectDir}/../service-client/build/module/service-client-1.0.0-SNAPSHOT.jar"
             from "src/main/modules/service-client/module.xml"
             into "${project.projectDir}/build/app/modules/service-client"
         }
         copy {
             from "${project.projectDir}/../service-module-01-api/build/module/service-module-01-api-1.0.0-SNAPSHOT.jar"
+            from "src/main/modules/service-module-01-api/module.xml"
+            into "${project.projectDir}/build/app/modules/service-module-01-api"
+        }
+        copy {
             from "${project.projectDir}/../service-module-02-api/build/module/service-module-02-api-1.0.0-SNAPSHOT.jar"
-            from "src/main/modules/api-module/module.xml"
-            into "${project.projectDir}/build/app/modules/api-module"
+            from "src/main/modules/service-module-02-api/module.xml"
+            into "${project.projectDir}/build/app/modules/service-module-02-api"
         }
         copy {
             from "${project.projectDir}/../service-module-01-impl/build/module/service-module-01-impl-1.0.0-SNAPSHOT.jar"

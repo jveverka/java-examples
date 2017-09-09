@@ -5,6 +5,8 @@
         <resource-root path="guava-23.0.jar" />
     </resources>
     <dependencies>
-        <module name="api-module"/>
+        <module name="service-module-01-api"/>
+        <module name="service-registry"/>
+        <module name="common"/>
     </dependencies>
 </module>

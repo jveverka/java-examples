@@ -18,6 +18,7 @@ subprojects {
 project(':modular-application') {
     dependencies {
         compile project(':service-client')
+        compile project(':service-registry')
         compile project(':service-module-01-api')
         compile project(':service-module-01-impl')
         compile project(':service-module-02-api')
@@ -25,8 +26,12 @@ project(':modular-application') {
     }
 }
 
+project(':service-registry') {
+}
+
 project(':service-client') {
     dependencies {
+        compile project(':service-registry')
         compile project(':service-module-01-api')
         compile project(':service-module-02-api')
     }
@@ -37,6 +42,7 @@ project(':service-module-01-api') {
 
 project(':service-module-01-impl') {
     dependencies {
+        compile project(':service-registry')
         compile project(':service-module-01-api')
     }
 }
@@ -46,6 +52,7 @@ project(':service-module-02-api') {
 
 project(':service-module-02-impl') {
     dependencies {
+        compile project(':service-registry')
         compile project(':service-module-02-api')
     }
 }
