@@ -26,7 +26,7 @@ Application modules:
 * __service-module-01-api__ - APIs for service-module-01
 * __service-module-01__ - data service using guava 23.0
 * __service-module-02-api__ - APIs for service-module-01
-* __service-module-02__ - data service using guava 18.0
+* __service-module-02__ - data service using guava 16.0
 * __service-registry__ - simple replacement for DI
 
 Build and Run
@@ -38,7 +38,7 @@ In this case run pre-build application:
 ```cd modular-application/build/app```   
 ```./start-application-simple.sh```  
 There is ```java.lang.NoSuchMethodError``` thrown and application fails because service-module-01 and service-module-02 are both using guava, but 
-different versions (23.0 and 18.0). service-module-02 uses intentionally deprecated APIs that are not available in newer version of guava. 
+different versions (23.0 and 16.0). service-module-02 uses intentionally deprecated APIs that are not available in newer version of guava. 
 
 ### Run as modular java app
 In this case run pre-build application:  

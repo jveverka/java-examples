@@ -3,7 +3,7 @@ group = 'itx.examples.modules'
 version = '1.0.0-SNAPSHOT'
 
 dependencies {
-   compile group: 'com.google.guava', name: 'guava', version: '18.0'
+   compile group: 'com.google.guava', name: 'guava', version: '16.0'
 }
 
 task buildmodules {

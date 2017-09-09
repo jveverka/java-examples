@@ -2,7 +2,7 @@
 <module xmlns="urn:jboss:module:1.5" name="service-module-02">
     <resources>
         <resource-root path="service-module-02-impl-1.0.0-SNAPSHOT.jar" />
-        <resource-root path="guava-18.0.jar" />
+        <resource-root path="guava-16.0.jar" />
     </resources>
     <dependencies>
         <module name="service-module-02-api"/>
