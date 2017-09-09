@@ -13,7 +13,8 @@ task buildmodules {
 
     doLast {
         copy {
-            from "src/main/scripts/start-application.sh"
+            from "src/main/scripts/start-application-modular.sh"
+            from "src/main/scripts/start-application-simple.sh"
             into "${project.projectDir}/build/app/"
         }
         copy {

@@ -34,14 +34,16 @@ Build and Run
 ```gradle clean buildmodules```
 
 ### Run as standard java app
-In this case just run ```itx.examples.modules.application.Main``` in __modular-application__ project.
+In this case run pre-build application:  
+```cd modular-application/build/app```   
+```./start-application-simple.sh```  
 There is ```java.lang.NoSuchMethodError``` thrown and application fails because service-module-01 and service-module-02 are both using guava, but 
 different versions (23.0 and 18.0). service-module-02 uses intentionally deprecated APIs that are not available in newer version of guava. 
 
 ### Run as modular java app
 In this case run pre-build application:  
 ```cd modular-application/build/app```   
-```./start-application.sh```  
+```./start-application-modular.sh```  
 This application uses static modularity, all modules are prepared in application directory and are 
 loaded and activated on application start by __app__ module.
 There is no ```java.lang.NoSuchMethodError``` because modules are
