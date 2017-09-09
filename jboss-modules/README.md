@@ -35,8 +35,8 @@ Build and Run
 
 ### Run as standard java app
 In this case just run ```itx.examples.modules.application.Main``` in __modular-application__ project.
-There is ```java.lang.NoSuchMethodError``` because service-module-01 and service-module-02 are both using guava, but 
-different versions. service-module-02 uses deprecated APIs that are not available in newer version of guava. 
+There is ```java.lang.NoSuchMethodError``` thrown and application fails because service-module-01 and service-module-02 are both using guava, but 
+different versions (23.0 and 18.0). service-module-02 uses intentionally deprecated APIs that are not available in newer version of guava. 
 
 ### Run as modular java app
 In this case run pre-build application:  
