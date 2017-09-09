@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module xmlns="urn:jboss:module:1.0" name="service-client">
+<module xmlns="urn:jboss:module:1.5" name="service-client">
     <resources>
         <resource-root path="service-client-1.0.0-SNAPSHOT.jar" />
     </resources>
