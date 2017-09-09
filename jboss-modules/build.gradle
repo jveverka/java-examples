@@ -31,7 +31,6 @@ project(':service-registry') {
 
 project(':service-client') {
     dependencies {
-        compile project(':service-registry')
         compile project(':service-module-01-api')
         compile project(':service-module-02-api')
     }
@@ -42,7 +41,6 @@ project(':service-module-01-api') {
 
 project(':service-module-01-impl') {
     dependencies {
-        compile project(':service-registry')
         compile project(':service-module-01-api')
     }
 }
@@ -52,7 +50,6 @@ project(':service-module-02-api') {
 
 project(':service-module-02-impl') {
     dependencies {
-        compile project(':service-registry')
         compile project(':service-module-02-api')
     }
 }

@@ -8,5 +8,9 @@
         <module name="common"/>
         <module name="service-client"/>
         <module name="service-registry"/>
+        <module name="service-module-01"/>
+        <module name="service-module-01-api"/>
+        <module name="service-module-02"/>
+        <module name="service-module-02-api"/>
     </dependencies>
 </module>

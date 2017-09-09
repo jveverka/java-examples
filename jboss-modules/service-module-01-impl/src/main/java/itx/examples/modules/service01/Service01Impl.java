@@ -1,22 +1,14 @@
 package itx.examples.modules.service01;
 
-import itx.examples.modules.serviceregistry.ServiceRegistry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.base.MoreObjects;
 
 public class Service01Impl implements Service01 {
 
-    final private static Logger LOG = LoggerFactory.getLogger(Service01Impl.class);
-
-    static {
-        LOG.info("init ...");
-        ServiceRegistry instance = ServiceRegistry.getInstance();
-        instance.registerService(Service01.class, new Service01Impl());
-    }
-
     @Override
     public String getData() {
-        return "dataFromService01";
+        MoreObjects.ToStringHelper toStringHelper = MoreObjects.toStringHelper(this);
+        toStringHelper.add("v1",1);
+        return "dataFromService01=" + toStringHelper.toString();
     }
 
 }

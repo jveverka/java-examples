@@ -2,10 +2,47 @@ Java modules demo
 =================
 Simple example of 'modular' java application, 
 based on [JBoss Modules](https://github.com/jboss-modules/jboss-modules) project.
+For further details, see [this manual](https://jboss-modules.github.io/jboss-modules/manual/).
+Modular application means that the modules listed below have own class loader.
 
+This demo simulates the situation where java application has to use java libraries that are 
+not aligned and they have same dependencies but of different versions. Artifacts used in this 
+demo application does not need to be OSGi compatible or have special files in META-INF directory.
+That's why JBoss modules system is much easier to use than OSGi.
+
+Application projects:
+* __modular-application__ - app module and module.xml files for other modules
+* __service-client__ - implementation of service-client module
+* __service-module-01-api__ - implementation of service-module-01-api module
+* __service-module-01__ - implementation of service-module-01 module
+* __service-module-02-api__ - implementation of service-module-02-api module
+* __service-module-02__ - implementation of service-module-02 module
+* __service-registry__ - implementation of service-registry module
+
+Application modules:
+* __app__ - main application module, app is initialized here.
+* __common__ - common libraries like log4j, slf4j  
+* __service-client__ - service that is using service-module-01 and service-module-02
+* __service-module-01-api__ - APIs for service-module-01
+* __service-module-01__ - data service using guava 23.0
+* __service-module-02-api__ - APIs for service-module-01
+* __service-module-02__ - data service using guava 18.0
+* __service-registry__ - simple replacement for DI
 
 Build and Run
 -------------
-```gradle clean buildmodules```   
+```gradle clean buildmodules```
+
+### Run as standard java app
+In this case just run ```itx.examples.modules.application.Main``` in __modular-application__ project.
+There is ```java.lang.NoSuchMethodError``` because service-module-01 and service-module-02 are both using guava, but 
+different versions. service-module-02 uses deprecated APIs that are not available in newer version of guava. 
+
+### Run as modular java app
+In this case run pre-build application:  
 ```cd modular-application/build/app```   
-```./start-application.sh```
+```./start-application.sh```  
+This application uses static modularity, all modules are prepared in application directory and are 
+loaded and activated on application start by __app__ module.
+There is no ```java.lang.NoSuchMethodError``` because modules are
+separated by their own class loaders. Application runs just fine.

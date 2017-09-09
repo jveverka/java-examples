@@ -6,7 +6,6 @@
     </resources>
     <dependencies>
         <module name="service-module-02-api"/>
-        <module name="service-registry"/>
         <module name="common"/>
     </dependencies>
 </module>
