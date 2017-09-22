@@ -20,7 +20,7 @@ public class ApplicationTest {
         SecondaryService instance = injector.getInstance(SecondaryService.class);
         String xxx = instance.getData("xxx");
         Assert.assertNotNull(xxx);
-        Assert.assertEquals(xxx,"ss=ps=red=Rxxx:ps=red=Rxxx");
+        Assert.assertEquals(xxx,"ss=ps=red=Rxxx:ps=blue=Bxxx");
     }
 
 }

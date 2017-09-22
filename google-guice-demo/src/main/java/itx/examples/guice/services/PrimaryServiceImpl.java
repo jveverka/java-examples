@@ -11,7 +11,7 @@ public class PrimaryServiceImpl implements PrimaryService {
     private DataService redDataService;
 
     @Inject
-    @Named("red")
+    @Named("blue")
     private DataService blueDataService;
 
     @Override
