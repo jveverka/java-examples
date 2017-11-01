@@ -1,0 +1,25 @@
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+   mavenCentral()
+}
+
+dependencies {
+   compile 'org.eclipse.jetty:jetty-server:9.4.7.v20170914'
+   compile 'org.eclipse.jetty:jetty-servlet:9.4.7.v20170914'
+   compile 'org.eclipse.jetty.http2:http2-server:9.4.7.v20170914'
+   compile 'org.eclipse.jetty:jetty-alpn-server:9.4.7.v20170914'
+   compile 'org.eclipse.jetty:jetty-client:9.4.7.v20170914'
+   compile 'org.eclipse.jetty.alpn:alpn-api:1.1.3.v20160715'
+   compile 'com.fasterxml.jackson.core:jackson-databind:2.9.2'
+   compile 'javax.servlet:javax.servlet-api:4.0.0'
+   compile 'org.slf4j:slf4j-api:1.7.25'
+   compile 'org.slf4j:slf4j-log4j12:1.7.25'
+   testCompile 'org.testng:testng:6.11'
+}
+
+
