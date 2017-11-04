@@ -1,6 +1,5 @@
 package itx.examples.jetty.server.http2;
 
-import itx.examples.jetty.common.services.EchoService;
 import org.eclipse.jetty.http2.FlowControlStrategy;
 import org.eclipse.jetty.http2.HTTP2Connection;
 import org.eclipse.jetty.http2.api.server.ServerSessionListener;
@@ -17,23 +16,25 @@ import org.eclipse.jetty.util.thread.ReservedThreadExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 public class ServerConnectionFactory extends HTTP2ServerConnectionFactory {
 
     final private static Logger LOG = LoggerFactory.getLogger(ServerConnectionFactory.class);
 
     private ConnectionListener connectionListener;
-    private EchoService echoService;
+    private Map<String, StreamProcessorRegistration> streamProcessors;
 
-    public ServerConnectionFactory(HttpConfiguration httpConfiguration, EchoService echoService) {
+    public ServerConnectionFactory(HttpConfiguration httpConfiguration, Map<String, StreamProcessorRegistration> streamProcessors) {
         super(httpConfiguration);
         this.connectionListener = new ConnectionListener();
-        this.echoService = echoService;
+        this.streamProcessors = streamProcessors;
     }
 
     @Override
     public Connection newConnection(Connector connector, EndPoint endPoint) {
         LOG.info("newConnection: {}", endPoint.getLocalAddress().toString());
-        ServerSessionListener listener = new CustomSessionListener(connector, endPoint, echoService);
+        ServerSessionListener listener = new CustomSessionListener(connector, endPoint, streamProcessors);
 
         Generator generator = new Generator(connector.getByteBufferPool(), getMaxDynamicTableSize(), getMaxHeaderBlockFragment());
         FlowControlStrategy flowControl = getFlowControlStrategyFactory().newFlowControlStrategy();

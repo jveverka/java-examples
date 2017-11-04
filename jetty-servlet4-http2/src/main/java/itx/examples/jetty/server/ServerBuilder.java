@@ -1,11 +1,13 @@
 package itx.examples.jetty.server;
 
-import itx.examples.jetty.common.SystemUtils;
 import itx.examples.jetty.common.services.EchoService;
 import itx.examples.jetty.server.http2.ServerConnectionFactory;
+import itx.examples.jetty.server.http2.StreamProcessorFactory;
+import itx.examples.jetty.server.http2.StreamProcessorRegistration;
 import org.eclipse.jetty.alpn.ALPN;
 import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.http2.HTTP2Cipher;
+import org.eclipse.jetty.http2.api.Stream;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -19,19 +21,44 @@ import java.util.Map;
 public class ServerBuilder {
 
     private Map<String, ServletHolder> servletHandlers;
-    private EchoService echoService;
+    private Map<String, StreamProcessorRegistration> streamProcessors;
+    private int secureHttpPort = 8443;
+    private int httpPort = 8080;
+    private KeyStore keyStore;
+    private String keyStorePassword;
 
     public ServerBuilder() {
-        servletHandlers = new HashMap<>();
+        this.servletHandlers = new HashMap<>();
+        this.streamProcessors = new HashMap<>();
     }
 
-    public ServerBuilder addServletHolder(String uri, ServletHolder servletHolder) {
-        servletHandlers.put(uri, servletHolder);
+    public ServerBuilder addStreamProcessorFactory(String urn, StreamProcessorFactory factory) {
+        streamProcessors.put(urn, new StreamProcessorRegistration(urn, factory));
         return this;
     }
 
-    public ServerBuilder setEchoService(EchoService echoService) {
-        this.echoService = echoService;
+    public ServerBuilder addServletHolder(String urn, ServletHolder servletHolder) {
+        servletHandlers.put(urn, servletHolder);
+        return this;
+    }
+
+    public ServerBuilder setSecureHttpPort(int secureHttpPort) {
+        this.secureHttpPort = secureHttpPort;
+        return this;
+    }
+
+    public ServerBuilder setHttpPort(int httpPort) {
+        this.httpPort = httpPort;
+        return this;
+    }
+
+    public ServerBuilder setKeyStore(KeyStore keyStore) {
+        this.keyStore = keyStore;
+        return this;
+    }
+
+    public ServerBuilder setKeyStorePassword(String keyStorePassword) {
+        this.keyStorePassword = keyStorePassword;
         return this;
     }
 
@@ -45,7 +72,7 @@ public class ServerBuilder {
         // HTTP Configuration
         HttpConfiguration httpConfig = new HttpConfiguration();
         httpConfig.setSecureScheme("https");
-        httpConfig.setSecurePort(8443);
+        httpConfig.setSecurePort(secureHttpPort);
         httpConfig.setSendXPoweredBy(true);
         httpConfig.setSendServerVersion(true);
 
@@ -53,16 +80,15 @@ public class ServerBuilder {
         HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfig);
         HTTP2CServerConnectionFactory http2CServerConnectionFactory = new HTTP2CServerConnectionFactory(httpConfig);
         ServerConnector http = new ServerConnector(server, httpConnectionFactory, http2CServerConnectionFactory);
-        http.setPort(8080);
+        http.setPort(httpPort);
         server.addConnector(http);
 
         // SSL Context Factory for HTTPS and HTTP/2
-        KeyStore keyStore = SystemUtils.loadJKSKeyStore("server.jks", "secret");
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setTrustStore(keyStore);
-        sslContextFactory.setTrustStorePassword("secret");
+        sslContextFactory.setTrustStorePassword(keyStorePassword);
         sslContextFactory.setKeyStore(keyStore);
-        sslContextFactory.setKeyStorePassword("secret");
+        sslContextFactory.setKeyStorePassword(keyStorePassword);
         sslContextFactory.setCipherComparator(HTTP2Cipher.COMPARATOR);
 
         // HTTPS Configuration
@@ -70,8 +96,7 @@ public class ServerBuilder {
         httpsConfig.addCustomizer(new SecureRequestCustomizer());
 
         // HTTP/2 Connection Factory
-        //HTTP2ServerConnectionFactory h2 = new HTTP2ServerConnectionFactory(httpsConfig);
-        ServerConnectionFactory h2 = new ServerConnectionFactory(httpsConfig, echoService);
+        ServerConnectionFactory h2 = new ServerConnectionFactory(httpsConfig, streamProcessors);
 
         NegotiatingServerConnectionFactory.checkProtocolNegotiationAvailable();
         ALPNServerConnectionFactory alpn = new ALPNServerConnectionFactory();
@@ -83,7 +108,7 @@ public class ServerBuilder {
         // HTTP/2 Connector
         ServerConnector http2Connector =
                 new ServerConnector(server, ssl, alpn, h2, new HttpConnectionFactory(httpsConfig));
-        http2Connector.setPort(8443);
+        http2Connector.setPort(secureHttpPort);
         server.addConnector(http2Connector);
 
         ALPN.debug=false;

@@ -1,6 +1,5 @@
 package itx.examples.jetty.server.http2;
 
-import itx.examples.jetty.common.services.EchoService;
 import org.eclipse.jetty.http.MetaData;
 import org.eclipse.jetty.http2.ErrorCode;
 import org.eclipse.jetty.http2.IStream;
@@ -23,8 +22,6 @@ import java.util.concurrent.TimeoutException;
 public class CustomSessionListener extends ServerSessionListener.Adapter implements Stream.Listener {
 
     final private static Logger LOG = LoggerFactory.getLogger(CustomSessionListener.class);
-    final private static String STREAM_URI = "/stream";
-    final private static String ECHO_URI = "/echo";
 
     private final Connector connector;
     private final EndPoint endPoint;
@@ -34,12 +31,12 @@ public class CustomSessionListener extends ServerSessionListener.Adapter impleme
     private int maxConcurrentStreams = 128;
     private int requestHeaderSize=8*1024;
 
-    private EchoService echoService;
+    private Map<String, StreamProcessorRegistration> streamProcessors;
 
-    public CustomSessionListener(Connector connector, EndPoint endPoint, EchoService echoService) {
+    public CustomSessionListener(Connector connector, EndPoint endPoint, Map<String, StreamProcessorRegistration> streamProcessors) {
         this.connector = connector;
         this.endPoint = endPoint;
-        this.echoService = echoService;
+        this.streamProcessors = streamProcessors;
     }
 
     protected HTTP2ServerConnection getConnection()
@@ -68,9 +65,10 @@ public class CustomSessionListener extends ServerSessionListener.Adapter impleme
             MetaData.Request request = (MetaData.Request)frame.getMetaData();
             String uriPath = request.getURI().getPath();
             LOG.info("isRequest {} {}", request.getMethod(), uriPath);
-            if (uriPath.startsWith(STREAM_URI) && uriPath.endsWith(ECHO_URI)) {
-                LOG.info("handling echo stream ...");
-                return new StreamEchoProcessor(echoService);
+            StreamProcessorRegistration streamProcessorRegistration = streamProcessors.get(uriPath);
+            if (streamProcessorRegistration != null) {
+                LOG.info("diverting to stream processor {}", uriPath);
+                return streamProcessorRegistration.getListener();
             }
         }
         getConnection().onNewStream(connector, (IStream)stream, frame);

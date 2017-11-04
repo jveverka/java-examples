@@ -1,4 +1,4 @@
-package itx.examples.jetty.server.http2;
+package itx.examples.jetty.server.streams;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import itx.examples.jetty.common.dto.EchoMessage;
@@ -23,6 +23,7 @@ public class StreamEchoProcessor implements Stream.Listener {
     private EchoService echoService;
 
     public StreamEchoProcessor(EchoService echoService) {
+        LOG.info("init ...");
         this.echoService = echoService;
         this.objectMapper = new ObjectMapper();
     }
