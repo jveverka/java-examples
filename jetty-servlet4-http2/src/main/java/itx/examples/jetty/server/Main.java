@@ -1,7 +1,9 @@
 package itx.examples.jetty.server;
 
+import itx.examples.jetty.common.services.EchoService;
 import itx.examples.jetty.common.services.MessageServiceAsync;
 import itx.examples.jetty.common.services.SystemInfoService;
+import itx.examples.jetty.server.services.EchoServiceImpl;
 import itx.examples.jetty.server.services.MessageServiceImpl;
 import itx.examples.jetty.server.services.SystemInfoServiceImpl;
 import itx.examples.jetty.server.servlet.DataAsyncServlet;
@@ -26,6 +28,7 @@ public class Main {
             ServerBuilder serverBuilder = new ServerBuilder();
             MessageServiceAsync messageService = new MessageServiceImpl();
             SystemInfoService systemInfoService = new SystemInfoServiceImpl();
+            EchoService echoService = new EchoServiceImpl();
 
             baseUri = "/data/sync";
             ServletHolder servletHolderDataSync = new ServletHolder(new DataSyncServlet(baseUri, messageService));
@@ -42,6 +45,7 @@ public class Main {
             ServletHolder servletHolderSystemInfo = new ServletHolder(new SystemInfoServlet(systemInfoService));
             serverBuilder.addServletHolder("/data/system/info/*", servletHolderSystemInfo);
 
+            serverBuilder.setEchoService(echoService);
             server = serverBuilder.build();
             server.start();
             Runtime.getRuntime().addShutdownHook(new Thread() {

@@ -53,6 +53,11 @@ public class GetListener implements Stream.Listener {
         LOG.info("onReset");
     }
 
+    public void restart() {
+        this.countDownLatch.countDown();
+        this.countDownLatch = new CountDownLatch(1);
+    }
+
     public <T> T get(Class<T> clazz) {
         try {
             countDownLatch.await();
