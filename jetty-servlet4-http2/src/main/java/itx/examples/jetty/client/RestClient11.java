@@ -12,19 +12,19 @@ import org.eclipse.jetty.client.HttpClient;
 import java.util.List;
 import java.util.Optional;
 
-public class RestClientHttp11 implements MessageServiceSync, SystemInfoService {
+public class RestClient11 implements MessageServiceSync, SystemInfoService {
 
-    final private static Logger LOG = LoggerFactory.getLogger(RestClientHttp11.class);
+    final private static Logger LOG = LoggerFactory.getLogger(RestClient11.class);
 
     private String url;
     private HttpClient httpClient;
     private ObjectMapper mapper;
 
-    public RestClientHttp11(String url) {
+    public RestClient11(String url) {
         try {
             this.url = url;
             this.mapper = new ObjectMapper();
-            httpClient = new HttpClient();
+            this.httpClient = new HttpClient();
             httpClient.start();
         } catch (Exception e) {
             LOG.error("RestClient init ERROR: ", e);

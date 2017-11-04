@@ -9,3 +9,6 @@ GET HTTP 2.0 https://localhost:8443/data/system/info
 For Java8, start JVM with VM option:  
 ```-Xbootclasspath/p:/opt/alpn-boot-8.1.11.v20170118.jar```
 
+## UnitTesting
+When running unit tests in Java8, do not forget to use
+-Xbootclasspath JVM option.
