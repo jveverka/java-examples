@@ -1,64 +1,65 @@
 package itx.examples.jetty.client;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import itx.examples.jetty.common.dto.Message;
-import itx.examples.jetty.common.dto.SystemInfo;
-import itx.examples.jetty.common.services.MessageServiceSync;
-import itx.examples.jetty.common.services.SystemInfoService;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.jetty.client.HttpClient;
 
-import java.util.List;
-import java.util.Optional;
+import java.security.KeyStore;
 
-public class RestClient11 implements MessageServiceSync, SystemInfoService {
+public abstract class RestClient11 implements AutoCloseable {
 
     final private static Logger LOG = LoggerFactory.getLogger(RestClient11.class);
 
     private String url;
     private HttpClient httpClient;
-    private ObjectMapper mapper;
 
     public RestClient11(String url) {
         try {
             this.url = url;
-            this.mapper = new ObjectMapper();
             this.httpClient = new HttpClient();
+            LOG.info("initializing HTTP client");
+            httpClient = new HttpClient();
             httpClient.start();
         } catch (Exception e) {
             LOG.error("RestClient init ERROR: ", e);
         }
     }
 
-    @Override
-    public Long publishMessage(Message message) {
-        return null;
-    }
-
-    @Override
-    public Optional<List<Message>> getMessages(String groupId) {
-        return null;
-    }
-
-    @Override
-    public List<String> getGroups() {
-        return null;
-    }
-
-    @Override
-    public Optional<Long> cleanMessages(String groupId) {
-        return null;
-    }
-
-    @Override
-    public SystemInfo getSystemInfo() {
+    public RestClient11(String url, KeyStore keyStore, String keystorePassword) {
         try {
-            String requestURL = url + "/data/system/info";
-            LOG.info("getSystemInfo: {}", requestURL);
-            return mapper.readValue(httpClient.GET(requestURL).getContent(), SystemInfo.class);
+            this.url = url;
+            this.httpClient = new HttpClient();
+            if (url.startsWith("https://")) {
+                LOG.info("initializing HTTPS client");
+                SslContextFactory sslContextFactory = new SslContextFactory();
+                sslContextFactory.setTrustStore(keyStore);
+                sslContextFactory.setTrustStorePassword(keystorePassword);
+                httpClient = new HttpClient(sslContextFactory);
+            } else {
+                LOG.info("initializing HTTP client");
+                httpClient = new HttpClient();
+            }
+            httpClient.start();
         } catch (Exception e) {
-            throw new HttpAccessException(e);
+            LOG.error("RestClient init ERROR: ", e);
+        }
+    }
+
+    public String getBaseURL() {
+        return url;
+    }
+
+    public HttpClient getClient() {
+        return httpClient;
+    }
+
+    @Override
+    public void close() {
+        try {
+            httpClient.stop();
+        } catch (Exception e) {
+            LOG.error("RestClient shutdown ERROR: ", e);
         }
     }
 

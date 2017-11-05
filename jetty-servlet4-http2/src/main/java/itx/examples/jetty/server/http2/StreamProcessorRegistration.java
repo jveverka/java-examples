@@ -1,7 +1,5 @@
 package itx.examples.jetty.server.http2;
 
-import org.eclipse.jetty.http2.api.Stream;
-
 public class StreamProcessorRegistration {
 
     private String urn;
@@ -16,8 +14,8 @@ public class StreamProcessorRegistration {
         return urn;
     }
 
-    public Stream.Listener getListener() {
-        return factory.create();
+    public StreamProcessorFactory getFactory() {
+        return factory;
     }
 
 }

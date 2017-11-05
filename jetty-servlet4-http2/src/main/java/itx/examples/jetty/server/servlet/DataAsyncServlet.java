@@ -24,7 +24,7 @@ public class DataAsyncServlet extends HttpServlet {
     private final MessageServiceAsync messageService;
 
     public DataAsyncServlet(String baseURI, MessageServiceAsync messageService) {
-        LOG.info("init");
+        LOG.info("init {}", baseURI);
         this.baseURI = baseURI;
         this.ongoingRequests = new ConcurrentLinkedQueue<>();
         this.service = Executors.newFixedThreadPool(10);

@@ -8,10 +8,11 @@ import itx.examples.jetty.server.services.EchoServiceImpl;
 import itx.examples.jetty.server.services.MessageServiceImpl;
 import itx.examples.jetty.server.services.SystemInfoServiceImpl;
 import itx.examples.jetty.server.servlet.DataAsyncServlet;
-import itx.examples.jetty.server.servlet.DataPushServlet;
 import itx.examples.jetty.server.servlet.DataSyncServlet;
+import itx.examples.jetty.server.servlet.EchoServiceServlet;
 import itx.examples.jetty.server.servlet.SystemInfoServlet;
 import itx.examples.jetty.server.streams.StreamEchoProcessorFactory;
+import itx.examples.jetty.server.streams.StreamMessageProcessorFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
@@ -44,15 +45,16 @@ public class Main {
             ServletHolder servletHolderDataAsync = new ServletHolder(new DataAsyncServlet(baseUri, messageService));
             serverBuilder.addServletHolder(baseUri + "/*", servletHolderDataAsync);
 
-            baseUri = "/data/push";
-            ServletHolder servletHolderDataPush = new ServletHolder(new DataPushServlet(baseUri));
-            serverBuilder.addServletHolder(baseUri + "/*", servletHolderDataPush);
+            baseUri = "/data/echo";
+            ServletHolder servletHolderEcho = new ServletHolder(new EchoServiceServlet(baseUri, echoService));
+            serverBuilder.addServletHolder(baseUri + "/*", servletHolderEcho);
 
             baseUri = "/data/system/info";
-            ServletHolder servletHolderSystemInfo = new ServletHolder(new SystemInfoServlet(systemInfoService));
+            ServletHolder servletHolderSystemInfo = new ServletHolder(new SystemInfoServlet(baseUri, systemInfoService));
             serverBuilder.addServletHolder(baseUri + "/*", servletHolderSystemInfo);
 
             serverBuilder.addStreamProcessorFactory("/stream/echo", new StreamEchoProcessorFactory(echoService));
+            serverBuilder.addStreamProcessorFactory("/stream/messages", new StreamMessageProcessorFactory(messageService));
             serverBuilder.setKeyStore(keyStore);
             serverBuilder.setSecureHttpPort(8443);
             serverBuilder.setHttpPort(8080);

@@ -1,16 +1,19 @@
 package itx.examples.jetty.tests.http20;
 
-import itx.examples.jetty.client.RestClient20;
+import itx.examples.jetty.client.http20.SystemInfoServiceClient;
+import itx.examples.jetty.common.SystemUtils;
 import itx.examples.jetty.common.dto.SystemInfo;
-import itx.examples.jetty.common.services.SystemInfoService;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.security.KeyStore;
 
 public class SystemInfoTest {
 
     @Test
-    public void getSystemInfoTest() {
-        SystemInfoService systemInfoService = new RestClient20("localhost", 8443);
+    public void getSystemInfoTest() throws Exception {
+        KeyStore keyStore = SystemUtils.loadJKSKeyStore("client.jks", "secret");
+        itx.examples.jetty.common.services.SystemInfoService systemInfoService = new SystemInfoServiceClient("localhost", 8443, keyStore, "secret");
         SystemInfo systemInfo = systemInfoService.getSystemInfo();
         Assert.assertNotNull(systemInfo);
         Assert.assertNotNull(systemInfo.getApplicationName());

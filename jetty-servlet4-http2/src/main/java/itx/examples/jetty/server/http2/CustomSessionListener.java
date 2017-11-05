@@ -68,7 +68,7 @@ public class CustomSessionListener extends ServerSessionListener.Adapter impleme
             StreamProcessorRegistration streamProcessorRegistration = streamProcessors.get(uriPath);
             if (streamProcessorRegistration != null) {
                 LOG.info("diverting to stream processor {}", uriPath);
-                return streamProcessorRegistration.getListener();
+                return streamProcessorRegistration.getFactory().create(stream);
             }
         }
         getConnection().onNewStream(connector, (IStream)stream, frame);

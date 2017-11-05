@@ -26,7 +26,7 @@ public class DataSyncServlet extends HttpServlet {
     private final MessageServiceAsync messageService;
 
     public DataSyncServlet(String baseURI, MessageServiceAsync messageService) {
-        LOG.info("init");
+        LOG.info("init {}", baseURI);
         this.messageService = messageService;
         this.baseURI = baseURI;
         this.objectMapper = new ObjectMapper();

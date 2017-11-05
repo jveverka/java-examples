@@ -1,13 +1,11 @@
 package itx.examples.jetty.server;
 
-import itx.examples.jetty.common.services.EchoService;
 import itx.examples.jetty.server.http2.ServerConnectionFactory;
 import itx.examples.jetty.server.http2.StreamProcessorFactory;
 import itx.examples.jetty.server.http2.StreamProcessorRegistration;
 import org.eclipse.jetty.alpn.ALPN;
 import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.http2.HTTP2Cipher;
-import org.eclipse.jetty.http2.api.Stream;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;

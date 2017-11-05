@@ -16,11 +16,13 @@ public class SystemInfoServlet extends HttpServlet {
 
     private final static Logger LOG = LoggerFactory.getLogger(SystemInfoServlet.class);
 
+    private final String baseURI;
     private final ObjectMapper objectMapper;
     private final SystemInfoService systemInfoService;
 
-    public SystemInfoServlet(SystemInfoService systemInfoService) {
-        LOG.info("init");
+    public SystemInfoServlet(String baseURI, SystemInfoService systemInfoService) {
+        LOG.info("init {}", baseURI);
+        this.baseURI = baseURI;
         this.objectMapper = new ObjectMapper();
         this.systemInfoService = systemInfoService;
     }

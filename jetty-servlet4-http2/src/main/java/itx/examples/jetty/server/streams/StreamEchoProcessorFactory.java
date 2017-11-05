@@ -13,7 +13,7 @@ public class StreamEchoProcessorFactory implements StreamProcessorFactory {
     }
 
     @Override
-    public Stream.Listener create() {
+    public Stream.Listener create(Stream stream) {
         return new StreamEchoProcessor(echoService);
     }
 
