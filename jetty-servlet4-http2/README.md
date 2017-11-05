@@ -1,9 +1,8 @@
 # Jetty HTTP2 server/client demo
-This demo shows capabilities of [Jetty](https://www.eclipse.org/jetty/) server 
-and [Servlet 4.0 APIs](https://jcp.org/en/jsr/detail?id=369). 
-Services deployed in this demo are accessible via via HTT1.1 and HTTP2. 
+This demo shows capabilities of [Jetty](https://www.eclipse.org/jetty/) server, [Servlet 4.0 APIs](https://jcp.org/en/jsr/detail?id=369) and Http2. 
+Services deployed in this demo are accessible via HTT1.1 and HTTP2. 
 
-##Architecture
+## Architecture
 ![](docs/architecture.png)
 
 * __client layer__ - in this demo it is implemented as TestNG integration tests.
@@ -28,10 +27,10 @@ GET HTTP 2.0 https://localhost:8443/data/echo/helloworld
 ```
 See also attached postman [file](docs/jetty-http2.postman_collection.json).
 
-##TODO
+## TODO
 Http2 stream full-duplex communication is not fully implemented for MassageService.
 
-##Build and Run
+## Build and Run
 For Java8, start JVM with VM option:  
 ```-Xbootclasspath/p:/opt/alpn-boot-8.1.11.v20170118.jar```  
 Build from commandline: ```gradle clean installDist distZip```  
