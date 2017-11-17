@@ -1,0 +1,19 @@
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+repositories {
+   mavenLocal()
+   mavenCentral()
+}
+
+mainClassName = 'itx.atomix.example.Main'
+
+dependencies {
+   compile 'org.slf4j:slf4j-api:1.7.25'
+   compile 'org.slf4j:slf4j-log4j12:1.7.25'
+   compile 'io.atomix:atomix-all:1.0.8'
+   testCompile 'org.testng:testng:6.11'
+}
+

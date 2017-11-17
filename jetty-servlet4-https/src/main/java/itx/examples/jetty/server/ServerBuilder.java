@@ -1,6 +1,5 @@
 package itx.examples.jetty.server;
 
-import itx.examples.jetty.common.SystemUtils;
 import org.eclipse.jetty.http.HttpVersion;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -18,16 +17,36 @@ public class ServerBuilder {
     final private static Logger LOG = LoggerFactory.getLogger(ServerBuilder.class);
 
     private static final String SERVLET_CONTEXT_PATH = "/";
-    private static final String JKS_PASSWORD = "secret";
-    private static final String KEYSTORE_PATH = "server.jks";
     private static final String SECURE_SCHEME = "https";
-    private static final int HTTP_PORT = 8080;
-    private static final int HTTPS_PORT = 8443;
+    private String keystorePassword = "secret";
+    private int httpPort = 8080;
+    private int httpsPort = 8443;
+    private KeyStore keyStore;
 
     private Map<String, ServletHolder> servletHandlers;
 
     public ServerBuilder() {
         servletHandlers = new HashMap<>();
+    }
+
+    public ServerBuilder setKeystorePassword(String keystorePassword) {
+        this.keystorePassword = keystorePassword;
+        return this;
+    }
+
+    public ServerBuilder setHttpPort(int httpPort) {
+        this.httpPort = httpPort;
+        return this;
+    }
+
+    public ServerBuilder setHttpsPort(int httpsPort) {
+        this.httpsPort = httpsPort;
+        return this;
+    }
+
+    public ServerBuilder setKeyStore(KeyStore keyStore) {
+        this.keyStore = keyStore;
+        return this;
     }
 
     public ServerBuilder addServletHolder(String uri, ServletHolder servletHolder) {
@@ -39,6 +58,8 @@ public class ServerBuilder {
         Server server = new Server();
 
         ServletContextHandler context = new ServletContextHandler(server, SERVLET_CONTEXT_PATH, ServletContextHandler.SESSIONS);
+        context.addEventListener(new ContainerListener());
+        context.addEventListener(new ServletContextListenerImpl());
         servletHandlers.forEach((uri, servletHolder) -> { context.addServlet(servletHolder, uri);});
         server.setHandler(context);
         LOG.info("servlets registered");
@@ -46,7 +67,7 @@ public class ServerBuilder {
         // HTTP Configuration
         HttpConfiguration httpConfig = new HttpConfiguration();
         httpConfig.setSecureScheme(SECURE_SCHEME);
-        httpConfig.setSecurePort(HTTPS_PORT);
+        httpConfig.setSecurePort(httpsPort);
         httpConfig.setSendXPoweredBy(true);
         httpConfig.setSendServerVersion(true);
         httpConfig.setOutputBufferSize(32768);
@@ -57,17 +78,14 @@ public class ServerBuilder {
         // HTTP Connector
         HttpConnectionFactory httpConnectionFactory = new HttpConnectionFactory(httpConfig);
         ServerConnector http = new ServerConnector(server, httpConnectionFactory);
-        http.setPort(HTTP_PORT);
+        http.setPort(httpPort);
         server.addConnector(http);
         LOG.info("http connection factory created");
-
-        //Load keystore
-        KeyStore keyStore = SystemUtils.loadJKSKeyStore(KEYSTORE_PATH, JKS_PASSWORD);
 
         // SSL Context Factory for HTTPS
         SslContextFactory sslContextFactory = new SslContextFactory();
         sslContextFactory.setKeyStore(keyStore);
-        sslContextFactory.setKeyManagerPassword(JKS_PASSWORD);
+        sslContextFactory.setKeyManagerPassword(keystorePassword);
         sslContextFactory.setExcludeCipherSuites("SSL_RSA_WITH_DES_CBC_SHA",
                 "SSL_DHE_RSA_WITH_DES_CBC_SHA", "SSL_DHE_DSS_WITH_DES_CBC_SHA",
                 "SSL_RSA_EXPORT_WITH_RC4_40_MD5",
@@ -83,7 +101,7 @@ public class ServerBuilder {
         ServerConnector sslConnector = new ServerConnector(server,
                 new SslConnectionFactory(sslContextFactory,HttpVersion.HTTP_1_1.asString()),
                 new HttpConnectionFactory(httpsConfig));
-        sslConnector.setPort(HTTPS_PORT);
+        sslConnector.setPort(httpsPort);
         server.addConnector(sslConnector);
 
         return server;
