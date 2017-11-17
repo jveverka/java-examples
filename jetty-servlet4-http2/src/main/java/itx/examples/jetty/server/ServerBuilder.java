@@ -11,6 +11,8 @@ import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 
 import java.security.KeyStore;
 import java.util.HashMap;
@@ -20,14 +22,26 @@ public class ServerBuilder {
 
     private Map<String, ServletHolder> servletHandlers;
     private Map<String, StreamProcessorRegistration> streamProcessors;
+    private ResourceConfig resourceConfig;
     private int secureHttpPort = 8443;
     private int httpPort = 8080;
     private KeyStore keyStore;
     private String keyStorePassword;
+    private String restUriPrefix = "/rest/*";
 
     public ServerBuilder() {
         this.servletHandlers = new HashMap<>();
         this.streamProcessors = new HashMap<>();
+    }
+
+    public ServerBuilder setRestUriPrefix(String restUriPrefix) {
+        this.restUriPrefix = restUriPrefix;
+        return this;
+    }
+
+    public ServerBuilder setResourceConfig(ResourceConfig resourceConfig) {
+        this.resourceConfig = resourceConfig;
+        return this;
     }
 
     public ServerBuilder addStreamProcessorFactory(String urn, StreamProcessorFactory factory) {
@@ -63,8 +77,15 @@ public class ServerBuilder {
     public Server build() throws Exception {
         Server server = new Server();
 
+        // Register servlets
         ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);
         servletHandlers.forEach((uri, servletHolder) -> { context.addServlet(servletHolder, uri);});
+
+        // Register jersey rest services
+        ServletContainer restServletContainer = new ServletContainer(resourceConfig);
+        ServletHolder restServletHolder = new ServletHolder(restServletContainer);
+        context.addServlet(restServletHolder, restUriPrefix);
+
         server.setHandler(context);
 
         // HTTP Configuration

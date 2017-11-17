@@ -4,6 +4,8 @@ import itx.examples.jetty.common.SystemUtils;
 import itx.examples.jetty.common.services.EchoService;
 import itx.examples.jetty.common.services.MessageServiceAsync;
 import itx.examples.jetty.common.services.SystemInfoService;
+import itx.examples.jetty.server.rest.RestApplication;
+import itx.examples.jetty.server.rest.SystemInfoRest;
 import itx.examples.jetty.server.services.EchoServiceImpl;
 import itx.examples.jetty.server.services.MessageServiceImpl;
 import itx.examples.jetty.server.services.SystemInfoServiceImpl;
@@ -55,6 +57,10 @@ public class Main {
 
             serverBuilder.addStreamProcessorFactory("/stream/echo", new StreamEchoProcessorFactory(echoService));
             serverBuilder.addStreamProcessorFactory("/stream/messages", new StreamMessageProcessorFactory(messageService));
+
+            serverBuilder.setRestUriPrefix("/rest/*");
+            serverBuilder.setResourceConfig(new RestApplication(systemInfoService));
+
             serverBuilder.setKeyStore(keyStore);
             serverBuilder.setSecureHttpPort(8443);
             serverBuilder.setHttpPort(8080);

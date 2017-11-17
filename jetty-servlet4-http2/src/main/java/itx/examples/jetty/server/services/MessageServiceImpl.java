@@ -22,7 +22,7 @@ public class MessageServiceImpl implements MessageServiceAsync {
     final private Map<ConversationId, MessageListener> listeners;
 
     public MessageServiceImpl() {
-        LOG.info("init ...");
+        LOG.info("service init ...");
         this.messages = new ConcurrentHashMap<>();
         this.listeners = new ConcurrentHashMap<>();
     }

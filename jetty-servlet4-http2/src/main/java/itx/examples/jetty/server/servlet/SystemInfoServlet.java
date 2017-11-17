@@ -34,7 +34,7 @@ public class SystemInfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.info("get getSystemInfo");
+        LOG.info("servlet: get getSystemInfo");
         objectMapper.writeValue(response.getOutputStream(), systemInfoService.getSystemInfo());
         response.setStatus(HttpServletResponse.SC_OK);
     }

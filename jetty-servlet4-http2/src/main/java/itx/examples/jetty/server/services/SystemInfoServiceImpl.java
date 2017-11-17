@@ -9,6 +9,10 @@ public class SystemInfoServiceImpl implements SystemInfoService {
 
     final private static Logger LOG = LoggerFactory.getLogger(SystemInfoServiceImpl.class);
 
+    public SystemInfoServiceImpl() {
+        LOG.info("service init ...");
+    }
+
     @Override
     public SystemInfo getSystemInfo() {
         LOG.info("getSystemInfo");

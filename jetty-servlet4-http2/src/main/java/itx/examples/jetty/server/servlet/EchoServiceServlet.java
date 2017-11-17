@@ -36,7 +36,7 @@ public class EchoServiceServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.info("get ping");
+        LOG.info("servlet: get ping");
         String[] urlParameters = SystemUtils.getURLParameters(baseURI, request.getRequestURI());
         String responseMsg = echoService.ping(urlParameters[0]);
         EchoMessage echoResponse = new EchoMessage(responseMsg);
@@ -46,7 +46,7 @@ public class EchoServiceServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.info("post ping");
+        LOG.info("servlet: post ping");
         EchoMessage echoRequest = objectMapper.readValue(request.getInputStream(), EchoMessage.class);
         String responseMsg = echoService.ping(echoRequest.getMessage());
         EchoMessage echoResponse = new EchoMessage(responseMsg);

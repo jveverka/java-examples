@@ -8,6 +8,10 @@ public class EchoServiceImpl implements EchoService {
 
     final private static Logger LOG = LoggerFactory.getLogger(EchoServiceImpl.class);
 
+    public EchoServiceImpl() {
+        LOG.info("service init ...");
+    }
+
     @Override
     public String ping(String message) {
         LOG.info("echo:{}", message);
