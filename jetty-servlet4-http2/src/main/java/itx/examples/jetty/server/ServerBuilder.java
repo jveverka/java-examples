@@ -9,20 +9,23 @@ import org.eclipse.jetty.http2.HTTP2Cipher;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.servlet.DefaultServlet;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.servlet.ServletContainer;
 
+import javax.servlet.DispatcherType;
 import java.security.KeyStore;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ServerBuilder {
 
     private Map<String, ServletHolder> servletHandlers;
     private Map<String, StreamProcessorRegistration> streamProcessors;
+    private Map<String, FilterHolder> filters;
+    private List<EventListener> sessionEventListeners;
     private ResourceConfig resourceConfig;
     private int secureHttpPort = 8443;
     private int httpPort = 8080;
@@ -35,6 +38,18 @@ public class ServerBuilder {
     public ServerBuilder() {
         this.servletHandlers = new HashMap<>();
         this.streamProcessors = new HashMap<>();
+        this.filters = new HashMap<>();
+        this.sessionEventListeners = new ArrayList<>();
+    }
+
+    public ServerBuilder addSessionEventListener(EventListener eventListener) {
+        sessionEventListeners.add(eventListener);
+        return this;
+    }
+
+    public ServerBuilder addServletFilter(String urn, FilterHolder filterHolder) {
+        filters.put(urn, filterHolder);
+        return this;
     }
 
     public ServerBuilder setStaticResourceBasePath(String staticResourceBasePath) {
@@ -93,6 +108,11 @@ public class ServerBuilder {
         // Register servlets
         ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);
         servletHandlers.forEach((uri, servletHolder) -> { context.addServlet(servletHolder, uri);});
+        // Register servlet filters
+        filters.forEach((urn, filterHolder) -> { context.addFilter(filterHolder, urn,
+                EnumSet.of(DispatcherType.REQUEST)); });
+        // Register EventListener instances
+        sessionEventListeners.forEach( listener -> { context.getSessionHandler().addEventListener(listener); });
 
         // Register jersey rest services
         ServletContainer restServletContainer = new ServletContainer(resourceConfig);

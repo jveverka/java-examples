@@ -7,6 +7,7 @@ public class RestApplication extends ResourceConfig {
 
     public RestApplication(SystemInfoService systemInfoService) {
         register(SystemInfoRest.class);
+        register(RestRequestFilter.class);
         register(new ServiceBinder(systemInfoService));
     }
 

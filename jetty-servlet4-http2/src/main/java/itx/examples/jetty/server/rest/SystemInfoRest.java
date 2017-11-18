@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 @Path("/system")
+@Singleton
 public class SystemInfoRest {
 
     private final static Logger LOG = LoggerFactory.getLogger(SystemInfoRest.class);
@@ -23,6 +25,10 @@ public class SystemInfoRest {
 
     @Inject
     private SystemInfoService systemInfoService;
+
+    public SystemInfoRest() {
+        LOG.info("init ...");
+    }
 
     @Path("/info")
     @GET

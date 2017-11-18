@@ -9,13 +9,11 @@ import itx.examples.jetty.server.rest.SystemInfoRest;
 import itx.examples.jetty.server.services.EchoServiceImpl;
 import itx.examples.jetty.server.services.MessageServiceImpl;
 import itx.examples.jetty.server.services.SystemInfoServiceImpl;
-import itx.examples.jetty.server.servlet.DataAsyncServlet;
-import itx.examples.jetty.server.servlet.DataSyncServlet;
-import itx.examples.jetty.server.servlet.EchoServiceServlet;
-import itx.examples.jetty.server.servlet.SystemInfoServlet;
+import itx.examples.jetty.server.servlet.*;
 import itx.examples.jetty.server.streams.StreamEchoProcessorFactory;
 import itx.examples.jetty.server.streams.StreamMessageProcessorFactory;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +53,10 @@ public class Main {
             ServletHolder servletHolderSystemInfo = new ServletHolder(new SystemInfoServlet(baseUri, systemInfoService));
             serverBuilder.addServletHolder(baseUri + "/*", servletHolderSystemInfo);
 
+            baseUri = "/data";
+            FilterHolder filterHolder = new FilterHolder(new CustomFilter());
+            serverBuilder.addServletFilter(baseUri + "/*", filterHolder);
+
             serverBuilder.addStreamProcessorFactory("/stream/echo", new StreamEchoProcessorFactory(echoService));
             serverBuilder.addStreamProcessorFactory("/stream/messages", new StreamMessageProcessorFactory(messageService));
 
@@ -63,6 +65,9 @@ public class Main {
 
             serverBuilder.setStaticResourceBasePath("/web");
             serverBuilder.setStaticResourceBaseUrn("/static/*");
+
+            serverBuilder.addSessionEventListener(new CustomHttpSessionListener());
+            serverBuilder.addSessionEventListener(new CustomHttpSessionIdListener());
 
             serverBuilder.setKeyStore(keyStore);
             serverBuilder.setSecureHttpPort(8443);
