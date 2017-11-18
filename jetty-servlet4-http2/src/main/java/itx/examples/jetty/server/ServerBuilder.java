@@ -8,6 +8,7 @@ import org.eclipse.jetty.alpn.server.ALPNServerConnectionFactory;
 import org.eclipse.jetty.http2.HTTP2Cipher;
 import org.eclipse.jetty.http2.server.HTTP2CServerConnectionFactory;
 import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -28,10 +29,22 @@ public class ServerBuilder {
     private KeyStore keyStore;
     private String keyStorePassword;
     private String restUriPrefix = "/rest/*";
+    private String staticResourceBasePath = "/web";
+    private String staticResourceBaseUrn = "/static/*";
 
     public ServerBuilder() {
         this.servletHandlers = new HashMap<>();
         this.streamProcessors = new HashMap<>();
+    }
+
+    public ServerBuilder setStaticResourceBasePath(String staticResourceBasePath) {
+        this.staticResourceBasePath = staticResourceBasePath;
+        return this;
+    }
+
+    public ServerBuilder setStaticResourceBaseUrn(String staticResourceBaseUrn) {
+        this.staticResourceBaseUrn = staticResourceBaseUrn;
+        return this;
     }
 
     public ServerBuilder setRestUriPrefix(String restUriPrefix) {
@@ -85,6 +98,13 @@ public class ServerBuilder {
         ServletContainer restServletContainer = new ServletContainer(resourceConfig);
         ServletHolder restServletHolder = new ServletHolder(restServletContainer);
         context.addServlet(restServletHolder, restUriPrefix);
+
+        // Register static resources (html pages, images, javascripts, ...)
+        String externalResource = this.getClass().getResource(staticResourceBasePath).toExternalForm();
+        DefaultServlet defaultServlet = new DefaultServlet();
+        ServletHolder holderPwd = new ServletHolder("default", defaultServlet);
+        holderPwd.setInitParameter("resourceBase", externalResource);
+        context.addServlet(holderPwd, staticResourceBaseUrn);
 
         server.setHandler(context);
 

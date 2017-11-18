@@ -61,6 +61,9 @@ public class Main {
             serverBuilder.setRestUriPrefix("/rest/*");
             serverBuilder.setResourceConfig(new RestApplication(systemInfoService));
 
+            serverBuilder.setStaticResourceBasePath("/web");
+            serverBuilder.setStaticResourceBaseUrn("/static/*");
+
             serverBuilder.setKeyStore(keyStore);
             serverBuilder.setSecureHttpPort(8443);
             serverBuilder.setHttpPort(8080);
