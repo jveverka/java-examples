@@ -31,6 +31,7 @@ public class ServerBuilder {
     private int httpPort = 8080;
     private KeyStore keyStore;
     private String keyStorePassword;
+    private String contextUrn = "/";
     private String restUriPrefix = "/rest/*";
     private String staticResourceBasePath = "/web";
     private String staticResourceBaseUrn = "/static/*";
@@ -40,6 +41,11 @@ public class ServerBuilder {
         this.streamProcessors = new HashMap<>();
         this.filters = new HashMap<>();
         this.sessionEventListeners = new ArrayList<>();
+    }
+
+    public ServerBuilder setContextUrn(String contextUrn) {
+        this.contextUrn = contextUrn;
+        return this;
     }
 
     public ServerBuilder addSessionEventListener(EventListener eventListener) {
@@ -106,7 +112,7 @@ public class ServerBuilder {
         Server server = new Server();
 
         // Register servlets
-        ServletContextHandler context = new ServletContextHandler(server, "/", ServletContextHandler.SESSIONS);
+        ServletContextHandler context = new ServletContextHandler(server, contextUrn, ServletContextHandler.SESSIONS);
         servletHandlers.forEach((uri, servletHolder) -> { context.addServlet(servletHolder, uri);});
         // Register servlet filters
         filters.forEach((urn, filterHolder) -> { context.addFilter(filterHolder, urn,

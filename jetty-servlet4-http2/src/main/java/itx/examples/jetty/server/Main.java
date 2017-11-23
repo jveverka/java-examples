@@ -12,6 +12,7 @@ import itx.examples.jetty.server.services.SystemInfoServiceImpl;
 import itx.examples.jetty.server.servlet.*;
 import itx.examples.jetty.server.streams.StreamEchoProcessorFactory;
 import itx.examples.jetty.server.streams.StreamMessageProcessorFactory;
+import itx.examples.jetty.server.ws.WsServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -33,6 +34,7 @@ public class Main {
             KeyStore keyStore = SystemUtils.loadJKSKeyStore("server.jks", password);
             String baseUri;
             ServerBuilder serverBuilder = new ServerBuilder();
+            serverBuilder.setContextUrn("/");
             MessageServiceAsync messageService = new MessageServiceImpl();
             SystemInfoService systemInfoService = new SystemInfoServiceImpl();
             EchoService echoService = new EchoServiceImpl();
@@ -52,6 +54,10 @@ public class Main {
             baseUri = "/data/system/info";
             ServletHolder servletHolderSystemInfo = new ServletHolder(new SystemInfoServlet(baseUri, systemInfoService));
             serverBuilder.addServletHolder(baseUri + "/*", servletHolderSystemInfo);
+
+            baseUri = "/websocket";
+            ServletHolder webSocketHolder = new ServletHolder(new WsServlet());
+            serverBuilder.addServletHolder(baseUri, webSocketHolder);
 
             baseUri = "/data";
             FilterHolder filterHolder = new FilterHolder(new CustomFilter());
