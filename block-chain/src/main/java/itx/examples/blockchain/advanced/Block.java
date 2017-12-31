@@ -1,4 +1,4 @@
-package itx.examples.blockchain;
+package itx.examples.blockchain.advanced;
 
 public class Block {
 

@@ -1,4 +1,4 @@
-package itx.examples.blockchain;
+package itx.examples.blockchain.advanced;
 
 import java.util.ArrayList;
 import java.util.List;
