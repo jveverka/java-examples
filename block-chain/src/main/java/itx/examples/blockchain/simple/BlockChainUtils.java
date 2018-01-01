@@ -19,20 +19,19 @@ public final class BlockChainUtils {
 
     public static Block createGenesisBlock(String data) {
         String nextId = CommonUtils.GENESIS_BLOCK_ID;
-        Block genesisBlock = new BlockBuilder()
-                .setId(nextId)
-                .setData(data)
-                .setPreviousHash(CommonUtils.GENESIS_BLOCK_PREVIOUS_HASH)
-                .build();
-        return genesisBlock;
+        return createBlock(nextId, data, CommonUtils.GENESIS_BLOCK_PREVIOUS_HASH);
     }
 
     public static Block createNextBlock(Block lastBlock, String data) {
         String nextId = CommonUtils.getNextBlockId(lastBlock.getId());
+        return createBlock(nextId, data, lastBlock.getHash());
+    }
+
+    private static Block createBlock(String id, String data, String previousHash) {
         Block nextBlock = new BlockBuilder()
-                .setId(nextId)
+                .setId(id)
                 .setData(data)
-                .setPreviousHash(lastBlock.getHash())
+                .setPreviousHash(previousHash)
                 .build();
         return nextBlock;
     }

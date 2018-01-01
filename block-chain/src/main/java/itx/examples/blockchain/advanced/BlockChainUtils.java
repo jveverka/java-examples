@@ -7,7 +7,30 @@ public final class BlockChainUtils {
     private BlockChainUtils() {
     }
 
-    public static final String HASH_PREFIX = "01";
+    private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvxywz";
+
+    public static String getNextNonce(String lastNonce) {
+        if (lastNonce == null) return String.valueOf(ALPHABET.charAt(0));
+        int maxIndex = ALPHABET.length() - 1;
+        StringBuilder nextNonce = new StringBuilder(lastNonce);
+        int remainder = 0;
+        for (int i=(lastNonce.length()-1); i>=0; i--) {
+            int nextIndex = ALPHABET.indexOf(lastNonce.charAt(i)) + 1;
+            if (nextIndex <= maxIndex) {
+                nextNonce.setCharAt(i, ALPHABET.charAt(nextIndex));
+                remainder = 0;
+                break;
+            } else {
+                nextNonce.setCharAt(i, ALPHABET.charAt(0));
+                remainder = 1;
+            }
+        }
+        if (remainder != 0) {
+            return ALPHABET.charAt(0) + nextNonce.toString();
+        } else {
+            return nextNonce.toString();
+        }
+    }
 
     public static String createSHA256Hash(Block block) {
         String blockData = block.getId() + block.getNonce() + block.getData() + block.getPreviousHash();
@@ -19,42 +42,31 @@ public final class BlockChainUtils {
         return CommonUtils.createSHA256Hash(blockData);
     }
 
-    public static boolean isValid(Block block) {
-        return block.getHash().startsWith(HASH_PREFIX);
+    public static boolean isValid(Block block, String hashPrefix) {
+        return block.getHash().startsWith(hashPrefix);
     }
 
-    public static Block createGenesisBlock(String data) {
+    public static Block mineGenesisBlock(String data, String hashPrefix) {
         String nextId = CommonUtils.GENESIS_BLOCK_ID;
-        String nonce = CommonUtils.getNextNonce(null);
-        Block genesisBlock = new BlockBuilder()
-                .setId(nextId)
-                .setNonce(nonce)
-                .setData(data)
-                .setPreviousHash(CommonUtils.GENESIS_BLOCK_PREVIOUS_HASH)
-                .build();
-        while (true) {
-            if (isValid(genesisBlock)) break;
-            nonce = CommonUtils.getNextNonce(nonce);
-            genesisBlock = new BlockBuilder()
-                    .from(genesisBlock)
-                    .setNonce(nonce)
-                    .build();
-        }
-        return genesisBlock;
+        return mineForValidBlock(nextId, data, CommonUtils.GENESIS_BLOCK_PREVIOUS_HASH, hashPrefix);
     }
 
-    public static Block mineNextBlock(Block lastBlock, String data) {
+    public static Block mineNextBlock(Block lastBlock, String data, String hashPrefix) {
         String nextId = CommonUtils.getNextBlockId(lastBlock.getId());
-        String nonce = CommonUtils.getNextNonce(null);
+        return mineForValidBlock(nextId, data, lastBlock.getHash(), hashPrefix);
+    }
+
+    private static Block mineForValidBlock(String id, String data, String previousHash, String hashPrefix) {
+        String nonce = getNextNonce(null);
         Block nextBlock = new BlockBuilder()
-                .setId(nextId)
+                .setId(id)
                 .setNonce(nonce)
                 .setData(data)
-                .setPreviousHash(lastBlock.getHash())
+                .setPreviousHash(previousHash)
                 .build();
         while (true) {
-            if (isValid(nextBlock)) break;
-            nonce = CommonUtils.getNextNonce(nonce);
+            if (isValid(nextBlock, hashPrefix)) break;
+            nonce = getNextNonce(nonce);
             nextBlock = new BlockBuilder()
                     .from(nextBlock)
                     .setNonce(nonce)
@@ -63,20 +75,20 @@ public final class BlockChainUtils {
         return nextBlock;
     }
 
-    public static boolean verifyBlock(Block block, Block previousBlock) {
-        return (verifyBlock(block) && verifyBlock(previousBlock) && block.getPreviousHash().equals(previousBlock.getHash()));
+    public static boolean verifyBlock(Block block, Block previousBlock, String hashPrefix) {
+        return (verifyBlock(block, hashPrefix) && verifyBlock(previousBlock, hashPrefix) && block.getPreviousHash().equals(previousBlock.getHash()));
     }
 
-    public static boolean verifyBlock(Block block) {
+    public static boolean verifyBlock(Block block, String hashPrefix) {
         String hash = createSHA256Hash(block);
-        return (hash.equals(block.getHash()) && isValid(block));
+        return (hash.equals(block.getHash()) && isValid(block, hashPrefix));
     }
 
     public static boolean verifyLedger(Ledger ledger) {
         for (int i=(ledger.size()-1); i>0; i--) {
             Block previousBlock = ledger.getBlockAt(i - 1);
             Block block = ledger.getBlockAt(i);
-            if (!verifyBlock(block, previousBlock)) {
+            if (!verifyBlock(block, previousBlock, ledger.getHashPrefix())) {
                 return false;
             }
         }

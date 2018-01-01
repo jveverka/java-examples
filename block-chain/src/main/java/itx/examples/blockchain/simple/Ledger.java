@@ -1,5 +1,6 @@
 package itx.examples.blockchain.simple;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Ledger {
@@ -17,7 +18,7 @@ public class Ledger {
     }
 
     public List<Block> getBlocks() {
-        return blocks;
+        return Collections.unmodifiableList(blocks);
     }
 
     public int size() {

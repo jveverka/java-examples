@@ -6,6 +6,7 @@ import java.util.List;
 public class LedgerBuilder {
 
     private String id;
+    private String hashPrefix;
     private List<Block> blocks;
 
     public LedgerBuilder() {
@@ -17,26 +18,32 @@ public class LedgerBuilder {
         return this;
     }
 
+    public LedgerBuilder setHashPrefix(String hashPrefix) {
+        this.hashPrefix = hashPrefix;
+        return this;
+    }
+
     public LedgerBuilder from(Ledger ledger) {
         this.id = ledger.getId();
+        this.hashPrefix = ledger.getHashPrefix();
         this.blocks = new ArrayList<>(ledger.getBlocks());
         return this;
     }
 
     public LedgerBuilder addData(String data) {
         if (blocks.size() == 0) {
-            Block nextBlock = BlockChainUtils.createGenesisBlock(data);
+            Block nextBlock = BlockChainUtils.mineGenesisBlock(data, hashPrefix);
             this.blocks.add(nextBlock);
         } else {
             Block lastBlock = blocks.get(blocks.size() - 1);
-            Block nextBlock = BlockChainUtils.mineNextBlock(lastBlock, data);
+            Block nextBlock = BlockChainUtils.mineNextBlock(lastBlock, data, hashPrefix);
             this.blocks.add(nextBlock);
         }
         return this;
     }
 
     public Ledger build() {
-        return new Ledger(id, blocks);
+        return new Ledger(id, hashPrefix, blocks);
     }
 
 }

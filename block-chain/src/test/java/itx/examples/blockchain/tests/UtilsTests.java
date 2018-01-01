@@ -7,27 +7,6 @@ import org.testng.annotations.Test;
 
 public class UtilsTests {
 
-    @DataProvider(name = "nonceData")
-    public static Object[][] getNonceData() {
-        return new Object[][] {
-                { null, "0" },
-                { "0", "1" },
-                { "a", "b" },
-                { "z", "00" },
-                { "az1", "az2" },
-                { "acz", "ad0" },
-                { "zzz", "0000" },
-                { "1zzz", "2000" },
-
-        };
-    }
-
-    @Test(dataProvider = "nonceData")
-    public void testNonce(String lastNonce, String expectedNextNonce) {
-        String nextNonce = CommonUtils.getNextNonce(lastNonce);
-        Assert.assertEquals(nextNonce, expectedNextNonce);
-    }
-
     @DataProvider(name = "sha256data")
     public static Object[][] getSha256data() {
         return new Object[][] {
