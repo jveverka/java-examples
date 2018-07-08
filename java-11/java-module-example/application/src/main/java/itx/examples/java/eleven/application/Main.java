@@ -17,6 +17,8 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
         LOG.info("MAIN start ...");
+        Runtime.Version version = Runtime.version();
+        LOG.info("Java version: {}", version.toString());
         ComputeService computeService = ComputeServiceProvider.getComputeService();
         TasksService tasksService = TasksServiceProvider.getTasksService();
         float computeResult = computeService.add(1,2,3,4);
@@ -34,7 +36,7 @@ public class Main {
                 String result = "";
                 LOG.info("task start");
                 result = (new Date()).toString();
-                LOG.info("task sone");
+                LOG.info("task done");
                 return result;
             }
         };
